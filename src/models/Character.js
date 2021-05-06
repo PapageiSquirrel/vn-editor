@@ -1,5 +1,8 @@
+let characterId = 0;
+
 export default class Character {
 	constructor(name, description) {
+		this.id = characterId++;
 		this.name = name;
 		this.description = description;
 		this.moods = [];

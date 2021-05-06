@@ -3,6 +3,7 @@ import axios from 'axios'
 import Tree from '../models/Tree.js'
 import Character from '../models/Character.js'
 import History from '../models/History.js'
+import Trait from '../models/Trait.js'
 
 import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService.js'
 
@@ -14,7 +15,8 @@ class DataService {
 		this.adapters = {
 			trees: treeAdapter,
 			characters: characterAdapter,
-			histories: historyAdapter
+			histories: historyAdapter,
+			traits: traitAdapter
 		}
 	}
 
@@ -22,25 +24,38 @@ class DataService {
 		this.pendingCalls[collection] = call.finally(() => { this.pendingCalls[collection] = null; });
 	}
 	
-	get(collection, params) {
+	get(collection, params, keepCache) {
+		if (keepCache) {
+			let cache = cacheService.getCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
+			if (cache) {
+				return Promise.resolve(cache);
+			}
+		}
+
 		if (this.pendingCalls[collection]) {
 			return this.pendingCalls[collection];
 		}
 
-		let paramsWithId = this.adapters[collection].addIdentifier(params);
-		let promise = axios.get(API_URL + collection, paramsWithId)
+		let id = this.adapters[collection].getIdentifier(params);
+		let promise = axios.get(API_URL + collection + (id ? '?id=' + id : ""))
 			.then(result => {
-				if (result.status === 200) {
-					return this.adapters[collection].convert(result.data);
+				return result.status === 200 ? this.adapters[collection].convert(result.data) : [];
+			})
+			.finally(data => {
+				if (keepCache) {
+					cacheService.addToCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS, data)
 				}
-				return [];
 			});
 
 		this._queue(collection, promise);
 		return promise;
 	}
 
-	set(collection, operation, data) {
+	set(collection, operation, data, clearCache) {
+		if (clearCache) {
+			cacheService.removeFromCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
+		}
+
 		if (this.pendingCalls[collection]) {
 			return this.pendingCalls[collection];
 		}
@@ -67,7 +82,8 @@ class DataService {
 const COLLECTION = {
 	TREES: "trees",
 	CHARACTERS: "characters",
-	HISTORIES: "histories"
+	HISTORIES: "histories",
+	TRAITS: "traits"
 };
 
 const OPERATION = {
@@ -79,12 +95,14 @@ const OPERATION = {
 
 const treeAdapter = {
 	addIdentifier(data) {
-		var dataWithId = data;
-		dataWithId.id = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
-		return dataWithId;
+		data.id |= cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return data;
+	},
+	getIdentifier(data) {
+		return data && data.id || cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
-		return new Tree(result.trunk, result.name);
+		return result && new Tree(result.trunk, result.name);
 	},
 	create() {
 		return new Tree();
@@ -93,11 +111,17 @@ const treeAdapter = {
 
 const characterAdapter = {
 	addIdentifier(data) {
-		let historyId = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
-		return {id: historyId, data: data};
+		let id = this.getIdentifier();
+		return {
+			id: id,
+			data: data
+		};
+	},
+	getIdentifier() {
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
-		return result.data.map(c => new Character(c.name, c.description));
+		return result && result.data ? result.data.map(c => new Character(c.name, c.description)) : [];
 	},
 	create() {
 		return new Character("New Character", "description of the character");
@@ -108,11 +132,33 @@ const historyAdapter = {
 	addIdentifier(data) {
 		return data;
 	},
+	getIdentifier(data) {
+		return data && data.id;
+	},
 	convert(result) {
-		return result.map(h => new History(h.id, h.name, h.description));
+		return result ? result.map(h => new History(h.id, h.name, h.description)) : [];
 	},
 	create() {
 		return new History(null, "New Story", "Description of the story");
+	}
+};
+
+const traitAdapter = {
+	addIdentifier(data) {
+		let id = this.getIdentifier();
+		return {
+			id: id,
+			data: data
+		};
+	},
+	getIdentifier() {
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+	},
+	convert(result) {
+		return result && result.data ? result.data.map(c => new Trait(c.name, c.steps)) : [];
+	},
+	create() {
+		return new Trait("New Trait");
 	}
 };
 

@@ -9,11 +9,11 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/data'));
 app.get('/api/:collection', (req, res) => {
 	let collection = req.params.collection;
-	let params = req.body;
+	let id = req.query.id;
 	try {
 		let result = JSON.parse(fs.readFileSync('./data/' + collection + '.json'));
-		if (params && params.id) {
-			result = result.find(i => i.id === params.id);
+		if (id) {
+			result = result.find(i => i.id === id);
 		}
 		res.json(result);
 	} catch(e) {
@@ -31,7 +31,8 @@ app.post('/api/:operation/:collection', (req, res) => {
 		fs.writeFileSync('./data/' + collection + '.json', newJson, 'utf8');
 		res.json(JSON.parse(newJson));
 	} catch(e) {
-		res.json(e);
+		console.error("Error on: ", collection, operation, data);
+		res.json({status: 500, error: "Server Error", message: "The server didn't responded correctly, please try again later."});
 	}
 });
 
@@ -39,8 +40,13 @@ app.listen(45050);
 
 function applyOperationToJSON(json, operation, data) {
 	let jsTable = JSON.parse(json);
-	let itemIndex = jsTable.findIndex(i => i.id === data.id);
-	let finalOp = operation === "save" && (itemIndex === -1 ? "add" : "update") || operation;
+	let itemIndex;
+	let finalOp = operation;
+
+	if (data && data.id) {
+		itemIndex = jsTable.findIndex(i => i.id === data.id);
+		finalOp = operation === "save" && (itemIndex === -1 ? "add" : "update") || operation;
+	}
 	try {
 		switch(finalOp) {
 			case "add":
@@ -51,6 +57,9 @@ function applyOperationToJSON(json, operation, data) {
 				break;
 			case "delete":
 				jsTable.splice(itemIndex, 1);
+				break;
+			case "save":
+				jsTable = data;
 				break;
 			default:
 				console.error("[Data] " + operation + " on " + data.name + " failed.");

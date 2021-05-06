@@ -6,23 +6,19 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-import Tree from '../models/Tree.js';
-
 export default {
   name: 'NavRecap',
   props: {
-    tree: Tree
+    tree: Object
   },
   computed: {
     getSelectedRecap() {
-      return this.tree.getRecap().join(' > ');
+      return this.tree && this.tree.getRecap().join(' > ');
     }
   },
   methods: {
     save() {
-        axios.post("http://localhost:45050/api/save/trees", this.tree);
+      this.$emit("save", this.tree);
     }
   }
 }

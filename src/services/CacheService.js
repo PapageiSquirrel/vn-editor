@@ -1,25 +1,29 @@
 class CacheService {
 	constructor() {
-		this.caches = {};
-		this.caches[CACHE_TYPE.APP] = appCache;
-		this.caches[CACHE_TYPE.SESSION] = window.sessionStorage;
-		this.caches[CACHE_TYPE.LOCAL] = localStorage;
+		this.adapters = {};
+		this.adapters[CACHE_TYPE.APP] = appCacheAdapter;
+		this.adapters[CACHE_TYPE.SESSION] = window.sessionStorage;
+		this.adapters[CACHE_TYPE.LOCAL] = localStorage;
 	}
 
 	getCache(type, key) {
-		return this.caches[type].getItem(key) || DEFAULT_CACHE[key];
+		return this.adapters[type].getItem(key) || DEFAULT_CACHE[key];
 	}
 
 	addToCache(type, key, value) {
-		this.caches[type].setItem(key, value);
+		this.adapters[type].setItem(key, value);
+	}
+
+	addToMultipleCache(types, key, value) {
+		types.forEach(t => this.addToCache(t, key, value));
 	}
 
 	removeFromCache(type, key) {
-		this.caches[type].remove(key);
+		this.adapters[type].remove(key);
 	}
 
 	clearCache(type) {
-		this.caches[type].clear();
+		this.adapters[type].clear();
 	}
 }
 
@@ -32,14 +36,17 @@ const CACHE_TYPE = {
 };
 
 const CACHE_KEY = {
-	HISTORY_IDENTIFIER: "historyId"
+	HISTORY_IDENTIFIER: "historyId",
+	STORY_CHARACTERS: "storyCharacters",
+	INTERACTION_EDIT: "interactionEdit"
 };
 
 const DEFAULT_CACHE = {
-	historyId: 0
+	historyId: 0,
+	interactionEdit: false
 };
 
-let appCache = {
+let appCacheAdapter = {
 	__cache: {},
 	getItem(key) {
 		return this.__cache[key];

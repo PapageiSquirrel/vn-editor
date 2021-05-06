@@ -1,11 +1,13 @@
-import Dialog from './Dialog';
+import Dialog from './Dialog.js'
+import { Choice } from './Choice.js'
+import { Condition } from './Condition.js'
 
 export default class TreeNode {
 	constructor(index) {
 		this.id = nodeId++;
 		this.index = index;
 		this.children = [];
-		Object.assign(this, genericAttributesMixin, dialogMixin);
+		Object.assign(this, genericAttributesMixin, interactionMixin);
 	}
 
 	addChild() {
@@ -44,10 +46,12 @@ let genericAttributesMixin = {
 			this.setAttribute(key, value);
 		}
 	}
-}
+};
 
-let dialogMixin = {
+let interactionMixin = {
 	dialogs: [],
+	choice: null,
+	conditions: [],
 
 	addDialog(index, character, mood, text) {
 		this.dialogs.splice(index, 0, new Dialog(character, mood, text));
@@ -59,5 +63,13 @@ let dialogMixin = {
 
 	removeDialog(index) {
 		this.dialogs.splice(index, 1);
+	},
+
+	addChoice(options) {
+		this.choice = new Choice(options);
+	},
+
+	addCondition(trait, operator, value) {
+		this.conditions.push(new Condition(trait, operator, value));
 	}
-}
+};

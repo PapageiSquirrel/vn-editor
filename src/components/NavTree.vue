@@ -1,10 +1,12 @@
 <template>
 	<div class="grid">
 		<div class="tree">
-			<NavRecap :tree="tree"></NavRecap>
+			<NavRecap :tree="tree" @save="save"></NavRecap>
 
 			<NavBranches 
-				:node="tree.trunk" 
+				:nodeIndex="0"
+				:node="tree.trunk"
+				:branchLength="1" 
 				:depth="0"
 				:nodeSelected="currentNode"
 				@onNodeSelection="cursorUpdate($event)"></NavBranches>
@@ -17,9 +19,9 @@
 <script>
 import NavData from '../mixins/NavData.js'
 
-import NavRecap from './NavRecap.vue'
-import NavBranches from './NavBranches.vue'
-import NodeDialogs from './NodeDialogs.vue'
+import NavRecap from './tree/NavRecap.vue'
+import NavBranches from './tree/NavBranches.vue'
+import NodeDialogs from './tree/NodeDialogs.vue'
 
 export default {
 	name: 'NavTree',
@@ -33,6 +35,7 @@ export default {
 	},
 	data() {
 		return {
+			collection: "trees",
 			currentNode: null,
 		}
 	},
@@ -51,7 +54,7 @@ export default {
 		cursorUpdate(indexes) {
 			// remove trunk from indexes
 			indexes.splice(0, 1);
-			this.tree().cursor = indexes;
+			this.tree.cursor = indexes;
 			this.currentNode = this.tree.getCurrentNode();
 		}
 	}

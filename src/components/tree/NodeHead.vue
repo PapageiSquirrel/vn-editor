@@ -1,16 +1,14 @@
 <template>
   <div>
     <div :style="{ backgroundColor: backgroundColor }">
-      <h3><title-input :title="node.title" @save="saveTitle" @select="selectNode" /></h3>
+      <h3><TitleInput :title="node.title" :isClickEdit="true" @save="saveTitle" @select="selectNode"></TitleInput></h3>
     </div>
     <button class="button button-white" v-show="isDeleteAllowed" v-on:click="deleteChild()">Delete</button>
   </div>
 </template>
 
 <script>
-import TreeNode from '../models/TreeNode.js';
-
-import TitleInput from './TitleInput.vue';
+import TitleInput from '../generic/TitleInput.vue';
 
 export default {
   name: 'NodeHead',
@@ -18,7 +16,7 @@ export default {
     TitleInput
   },
   props: {
-    node: TreeNode,
+    node: Object,
     isEnlarged: Boolean,
     isSelected: Boolean,
     backgroundColor: String

@@ -1,38 +1,39 @@
 <template>
-	<div>
-		<hr>
-		<div class="interval" @click="newDialog()">
-			
-		</div>
-		<div v-if="isEditing">
-			<select v-model="character">
-				<option v-for="c in characters" :key="c">{{c}}</option>
-			</select>
-			<select v-model="mood">
-				<option v-for="m in character.moods" :key="m">{{m}}</option>
-			</select>
-			<input type="text" v-model="text" />
-			<button @click="save">Ok</button>
-		</div>
-		<hr>
+	<div style="display:flex;">
+		<select v-model="character" style="width: 20%">
+			<option v-for="c in characters" :key="c.id">{{c.name}}</option>
+		</select>
+		<select v-model="mood" style="width: 20%">
+			<option v-for="m in moods" :key="m.type">{{m.type}}</option>
+		</select>
+		<input type="text" v-model="text" style="width: 60%" />
+		<button @click="save">Ok</button>
 	</div>
 </template>
 
 <script>
-import axios from 'axios';
+import NavData from '../../mixins/NavData.js'
 
 export default {
-	name: 'DialogEdit',
-	props: {
-		dialogIndex: Number
-	},
+	name: 'InteractionEdit',
+	mixins: [
+		NavData
+	],
 	data() {
 		return {
+			collection: "characters",
 			isEditing: false,
 			character: null,
-			characters: [],
 			mood: "",
 			text: ""
+		}
+	},
+	computed: {
+		characters() {
+			return this.loadedData || [];
+		},
+		moods() {
+			return this.character && this.characters.moods || [];
 		}
 	},
 	methods: {
@@ -53,13 +54,6 @@ export default {
 				}
 			});
 		}
-	},
-	created() {
-		axios.get("http://localhost:45050/api/characters").then(result => {
-			if (result.status === 200) {
-				this.characters = result.data;
-			}
-		});
 	}
 }
 </script>
@@ -76,6 +70,7 @@ hr {
 }
 
 .interval:hover {
+	height: 20px;
 	background-color: gray;
 }
 </style>

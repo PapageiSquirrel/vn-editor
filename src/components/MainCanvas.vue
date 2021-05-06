@@ -1,15 +1,20 @@
 <template>
 	<div>
 		<nav>
-			<button v-for="view in views" class="button" 
-				v-bind:key="view"
-				v-bind:class="{ active: currentView === view }"
-				v-on:click="currentView = view">{{view}}</button>
+			<button v-for="view in views" class="button"  style="width: 50%"
+				:key="view"
+				:class="{ active: currentView === view }"
+				:disabled="!storyOverview"
+				@click="currentView = view">{{view}}</button>
 		</nav>
+
+		<div v-if="!!storyOverview" class="card-bordered">
+			<h3>{{ storyOverview ? storyOverview.name : "" }}</h3>
+		</div>
 
 		<ToolBox></ToolBox>
 
-		<component :is="currentView" :collection="collection"></component>
+		<component :is="currentView" :clearCache="clearCache" @storyChange="onStoryChange"></component>
 	</div>
 </template>
 
@@ -20,6 +25,7 @@ import ToolBox from './ToolBox.vue'
 import NavHistory from './NavHistory.vue'
 import NavTree from './NavTree.vue'
 import NavCharacter from './NavCharacter.vue'
+import NavTrait from './NavTrait.vue'
 
 export default {
 	name: 'MainCanvas',
@@ -27,18 +33,24 @@ export default {
 		ToolBox,
 		NavHistory,
 		NavTree,
-		NavCharacter
+		NavCharacter,
+		NavTrait
 	},
 	data() {
 		return {
 			currentView: 'NavHistory',
-			views: ['NavHistory', 'NavTree', 'NavCharacter']
+			views: ['NavHistory', 'NavTree', 'NavCharacter', 'NavTrait'],
+			storyOverview: null
 		}
 	},
 	computed: {
-		collection() {
-			let collectionByView = [COLLECTION.HISTORIES, COLLECTION.TREES, COLLECTION.CHARACTERS];
-			return collectionByView[this.views.indexOf(this.currentView)];
+		clearCache() {
+			return [COLLECTION.CHARACTERS, COLLECTION.TRAITS].includes(this.collection);
+		}
+	},
+	methods: {
+		onStoryChange(data) {
+			this.storyOverview = data;
 		}
 	}
 }
@@ -46,5 +58,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  
+
 </style>

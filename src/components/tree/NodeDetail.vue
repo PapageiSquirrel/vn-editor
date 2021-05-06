@@ -11,12 +11,10 @@
 </template>
 
 <script>
-import TreeNode from '../models/TreeNode.js'
-
 export default {
   name: 'NodeDetail',
   props: {
-    node: TreeNode,
+    node: Object,
     isShort: Boolean
   }
 }

@@ -2,12 +2,21 @@ import { dataService, OPERATION } from '../services/DataService.js'
 
 export default {
 	props: {
-		collection: String
+		keepCache: Boolean,
+		clearCache: Boolean
 	},
 	data() {
 		return {
+			collection: "",
 			loadComplete: false,
-			loadedData: null
+			loadedData: null,
+			modificationHistory: [],
+			unwatch: null
+		}
+	},
+	computed: {
+		computedData() {
+			return JSON.parse(JSON.stringify(this.loadedData));
 		}
 	},
 	methods: {
@@ -19,22 +28,45 @@ export default {
 				this.loadedData = item;
 			}
 		},
+		undo() {
+			this.unwatch();
+			this.loadedData = this.modificationHistory.pop();
+			this.watch();
+		},
 		save(data) {
-			dataService.set(this.collection, OPERATION.SAVE, data || this.loadedData);
+			let jsData;
+			if (Array.isArray(this.loadedData)) {
+				jsData = [...this.loadedData];
+			} else {
+				jsData = {...this.loadedData};
+			}
+			dataService.set(this.collection, OPERATION.SAVE, data || jsData, this.clearCache);
 		},
 		remove(data) {
 			if (!Array.isArray(this.loadedData)) {
 				return;
 			}
 			this.loadedData.splice(this.loadedData.indexOf(data.id), 1);
-			dataService.set(this.collection, OPERATION.DELETE, data);
+		},
+		upload() {
+			// TODO
+		},
+		watch() {
+			this.unwatch = this.$watch('computedData', function(newVal, oldVal) {
+				this.modificationHistory.push(JSON.parse(JSON.stringify(oldVal)));
+			}, {
+				deep: true
+			});
 		}
 	},
 	created() {
-		dataService.get(this.collection)
+		dataService.get(this.collection, null, this.keepCache)
 			.then(result => {
+				this.loadedData = result;
 				this.loadComplete = true;
-				this.loadedData = result 
+			})
+			.then(() => {
+				this.watch();
 			});
 	}
 }
