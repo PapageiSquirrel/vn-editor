@@ -2,24 +2,29 @@
 	<div>
 		<div v-show="!editMode">
 			<ul>
-				<li v-for="option in options" :key="option.title">{{ option.title + "(" + option.traitChange + " " + option.valueChange + ")" }}</li>
+				<li v-for="option in options" :key="option.id">{{ option.title + "(" + option.traitChange + " " + option.valueChange + ")" }}</li>
 			</ul>
 
 			<button @click="addChoice">{{ options.length > 0 ? "Edit choice" : "Add a choice" }}</button>
 		</div>
 
 		<div v-show="editMode">
-			<div v-show="options.length > 0" v-for="option in options" :key="option.title">
-				<input type="text" v-model="option.title" />
-				<select v-model="option.traitChange">
+			<div v-show="options.length > 0" v-for="(option, index) in options" :key="option.id" class="optionContainer">
+				<b>{{index+1}}</b>
+				<input type="text" v-model="option.title" style="width: 70%" placeholder="Option label" />
+				<select v-model="option.traitChange" style="width: 20%" placeholder="Trait">
 					<option v-for="t in traits" :key="t.id">{{t.name}}</option>
 				</select>
-				<input type="number" v-model="option.traitValue" />
-				<input type="text" v-model="option.triggerName" />
+				<input type="number" v-model="option.traitValue" style="width: 10%" />
 			</div>
 			
-			<button @click="addOption">Add an option</button>
-			<button @click="save">Save choice</button>
+			<div style="display: block-inline">
+				<input name="decisiveInput" type="checkbox" v-model="isDecisive" style="width: auto" />
+				<label for="decisiveInput" style="width: 80%; text-align:left;">Decesive choice</label>
+			
+				<button @click="addOption" style="width: 10%"><font-awesome-icon icon="plus" /></button>
+				<button @click="save" style="width: 10%"><font-awesome-icon icon="save" /></button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -42,12 +47,14 @@ export default {
 		NavData
 	],
 	props: {
+		interactionIndex: Number,
 		nodeChildren: Array
 	},
 	data() {
 		return {
 			collection: "traits",
 			editMode: false,
+			isDecisive: false,
 			options: []
 		}
 	},
@@ -62,11 +69,18 @@ export default {
 			this.addOption();
 		},
 		addOption() {
-			this.options.push(interactionService.adapters[INTERACTION_TYPE.OPTION].create(newOption));
+			let option = interactionService.adapters[INTERACTION_TYPE.OPTION].create(newOption);
+			this.options.push(option);
 		},
 		save() {
 			this.isEditing = false;
-			this.$emit("addChoice", this.options);
+			this.$emit("addChoice", {
+				index: this.interactionIndex,
+				choice: {
+					options: this.options, 
+					isDecisive: this.isDecisive
+				}
+			});
 		}
 	}
 }
@@ -86,5 +100,9 @@ hr {
 .interval:hover {
 	height: 20px;
 	background-color: gray;
+}
+
+.optionContainer {
+	display: flex;
 }
 </style>

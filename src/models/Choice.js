@@ -1,10 +1,13 @@
-let choiceId = 0;
+let choiceId = 10000;
+let optionId = 0;
 
 class Choice {
-	constructor(options) {
+	constructor(options, index, isDecisive) {
 		this.id = choiceId++;
-		this.options = options;
+		this.options = options && options.map(o => new Option(o.title, o.traitChange, o.traitValue)) || [];
+		this.index = index;
 		this.chosenOptionIndex = -1;
+		this.isDecisive = isDecisive;
 	}
 
 	getNbOptions() {
@@ -13,11 +16,11 @@ class Choice {
 }
 
 class Option {
-	constructor(title, traitChange, traitValue, triggerName) {
+	constructor(title, traitChange, traitValue) {
+		this.id = optionId++;
 		this.title = title;
 		this.traitChange = traitChange;
 		this.traitValue = traitValue;
-		this.triggerValue = triggerName;
 	}
 
 	toString() {

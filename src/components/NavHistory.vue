@@ -1,10 +1,20 @@
 <template>
 	<div>
-		<div v-for="hist in histories" :key="hist.id" class="card-bordered" :class="{ selected: isSelectedStory(hist) }">
-			<TitleInput :title="hist.name" :isClickEdit="false" @save="hist.name = $event"></TitleInput>
-			<TitleInput :title="hist.description" :isClickEdit="false" @save="hist.description = $event"></TitleInput>
-			<button class="button-flat button-clear" @click="select(hist)">Select this story</button>
-			<button class="button-flat button-clear" @click="remove(hist)">Delete this story</button>
+		<div v-for="hist in histories" :key="hist.id" class="card-bordered" :class="{ selected: isSelectedStory(hist) }" style="display: flex;">
+			<button class="button-clear button-icon" @click="select(hist)">
+				<font-awesome-icon icon="thumbtack" />
+			</button>
+			<div style="width: 100%;">
+				<div style="display: flex;">
+					<TitleInput :title="hist.name" 
+						:titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" 
+						:isClickEdit="false" @save="hist.name = $event"  style="width: 100%;"></TitleInput>
+					<button class="button-clear button-icon" @click="remove(hist)" style="float: right;">
+						<font-awesome-icon icon="times" />
+					</button>
+				</div>
+				<textarea v-model="hist.description"></textarea>
+			</div>
 		</div>
 
 		<button class="button-flat button-clear" @click="add()">Create a new story</button>

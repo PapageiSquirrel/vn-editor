@@ -1,20 +1,28 @@
 import TreeNode from './TreeNode.js'
 
+let tid = 0;
+
 export default class Tree {
-	constructor(trunk, name) {
+	constructor(id, trunk, name) {
+		tid++;
+		this.id = id || tid;
 		this.trunk = this.__buildNodes(0, trunk);
 		this.name = name || "Tree Name";
 		this.cursor = [];
 	}
 
 	__buildNodes(index, node) {
-		let newNode = Object.assign(new TreeNode(index), node);
-		if (newNode.hasChildren()) {
-			newNode.children = newNode.children.map((child, index) => {
+		let newNode = !node ? new TreeNode(index) : new TreeNode(index, node.title, node.description, node.interactions, node.isDecisive);
+		if (node && node.children.length) {
+			newNode.children = node.children.map((child, index) => {
 				return this.__buildNodes(index, child);
 			});
 		}
 		return newNode;
+	}
+
+	goTo(array) {
+		this.cursor.push(...array);
 	}
 
 	getCurrentNode() {
@@ -24,7 +32,8 @@ export default class Tree {
 	}
 
 	getNextIndex() {
-		return this.getCurrentNode().getNumberOfChildren();
+		let node = this.getCurrentNode();
+		return node && node.getNumberOfChildren();
 	}
 
 	goDown(index) {
@@ -36,13 +45,20 @@ export default class Tree {
 	}
 
 	goNext() {
-		let nextIndex = this.cursor[this.cursor.length-1]++;
-		if (nextIndex === this.getNextIndex()) {
+		let node = this.getCurrentNode();
+		if (!node) {
 			this.goUp();
-			this.goNext();
-			return true;
+			this.cursor.splice(this.cursor.length-1, 1, this.cursor[this.cursor.length-1]+1);
+		} else if (node.hasChildren()) {
+			this.goDown(0);
+		} else {
+			this.cursor.splice(this.cursor.length-1, 1, this.cursor[this.cursor.length-1]+1);
 		}
-		return false;
+
+		let newNode = this.getCurrentNode();
+		if (!newNode && this.cursor.length > 1 || newNode && !newNode.interactions.length) {
+			this.goNext();
+		}
 	}
 
 	getDepth() {

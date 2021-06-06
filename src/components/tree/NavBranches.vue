@@ -1,10 +1,10 @@
-<template>
+	<template>
 	<div class="bordered paddingLg" :style="{ backgroundColor: backgroundColor }">
 		<div style="display: flex">
 			<ReorderingButtons style="width: 20%" v-show="branchLength > 1" :index="nodeIndex" :length="branchLength"
 				@reorder="onReorder"></ReorderingButtons>
 
-			<NodeHead class="noPadding" style="width: 70%; margin-left: 5%; margin-right: 5%;"
+			<NodeHead class="noPadding" style="width: 100%; margin-left: 5%; margin-right: 5%;"
 				:backgroundColor="backgroundColor" 
 				:node="node" 
 				:isSelected="isNodeSelected"
@@ -13,11 +13,11 @@
 				@onNodeDeletion="deleteNode"></NodeHead>
 		</div>
 
-		<NodeDetail v-bind:node="node" v-bind:isShort="!isOpen"></NodeDetail>
+		<textarea v-model="node.description"></textarea>
 
 		<div v-show="!isOpen">
 			<button class="button button-white" @click="toggleSubNodes()">
-				<span v-show="node.hasChildren()">open</span>
+				<span v-show="node.hasChildren()">open ({{node.getNumberOfChildren()}})</span>
 				<span v-show="!node.hasChildren()">create sub-section</span>
 			</button>
 		</div>
@@ -45,7 +45,6 @@
 
 <script>
 import NodeHead from './NodeHead.vue'
-import NodeDetail from './NodeDetail.vue'
 import NodeFoot from './NodeFoot.vue'
 
 import ReorderingButtons from '../generic/ReorderingButtons.vue'
@@ -54,7 +53,6 @@ export default {
 	name: 'NavBranches',
 	components: {
 		NodeHead,
-		NodeDetail,
 		NodeFoot,
 		ReorderingButtons
 	},
@@ -78,6 +76,10 @@ export default {
 			return this.depth+1;
 		},
 		backgroundColor: function() {
+			if (this.node.isDecisive) {
+				return 'rgb(200, 60, 80)';
+			}
+
 			let color = (256- this.depth * this.colorRatio).toString();
 			return 'rgb(' + color + ',' + color + ',' + color + ')';
 		},
@@ -115,10 +117,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .bordered {
-	border-style: solid none solid dashed;
-	border-width: 4px;
+	border-style: solid;
+	border-width: 2px;
 	border-color: black;
-	border-radius: 20px;
+	border-radius: 10px;
 }
 
 .paddingLg {

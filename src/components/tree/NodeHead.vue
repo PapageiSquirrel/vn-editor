@@ -3,7 +3,7 @@
     <div :style="{ backgroundColor: backgroundColor }">
       <h3><TitleInput :title="node.title" :isClickEdit="true" @save="saveTitle" @select="selectNode"></TitleInput></h3>
     </div>
-    <button class="button button-white" v-show="isDeleteAllowed" v-on:click="deleteChild()">Delete</button>
+    <button class="button button-white" v-show="isDeleteAllowed" v-on:click="deleteChild()"><font-awesome-icon icon="times" /></button>
   </div>
 </template>
 

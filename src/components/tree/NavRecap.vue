@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button @click="save">Save</button>
-    <p>{{getSelectedRecap}}</p>
+    <button @click="save"><font-awesome-icon icon="save" /></button>
+    <b>{{getSelectedRecap}}</b>
   </div>
 </template>
 
@@ -25,6 +25,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-  
+<style scoped>
+button {
+  margin: 10px;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-show="!isEditMode" width="display:flex;">
-			<button class="button-flat button-clear inputDisplay" :style="titleStyle" @click="selectOrEdit" style="width: 80%">{{title}}</button>
+			<button class="button-flat button-clear inputDisplay" :style="titleStyle" @click="selectOrEdit" style="width: 90%">{{title}}</button>
 			<button v-show="isClickEdit" class="button button-icon button-green" @click="edit">
 				<font-awesome-icon icon="edit" /></button>
 			<button v-show="isDeletable" class="button button-icon button-red" @click="deleteTitle">

@@ -15,15 +15,21 @@
 import NavData from '../../mixins/NavData.js'
 
 export default {
-	name: 'InteractionEdit',
+	name: 'DialogEdit',
 	mixins: [
 		NavData
 	],
+	props: {
+		defaultCharacter: String,
+		defaultMood: String,
+		defaultText: String,
+		interactionIndex: Number
+	},
 	data() {
 		return {
 			collection: "characters",
 			isEditing: false,
-			character: null,
+			character: "",
 			mood: "",
 			text: ""
 		}
@@ -33,7 +39,8 @@ export default {
 			return this.loadedData || [];
 		},
 		moods() {
-			return this.character && this.characters.moods || [];
+			let character = this.character && this.characters.find(c => c.name === this.character);
+			return character && character.moods || [];
 		}
 	},
 	methods: {
@@ -46,7 +53,7 @@ export default {
 		save() {
 			this.isEditing = false;
 			this.$emit("addDialog", {
-				index: this.dialogIndex,
+				index: this.interactionIndex,
 				dialog: {
 					character: this.character,
 					mood: this.mood,
@@ -54,6 +61,11 @@ export default {
 				}
 			});
 		}
+	},
+	created() {
+		this.character = this.defaultCharacter || "";
+		this.mood = this.defaultMood || "";
+		this.text = this.defaultText || "";
 	}
 }
 </script>

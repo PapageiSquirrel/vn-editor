@@ -1,0 +1,63 @@
+--- Editeur ---				--- Progress ---	--- Priority ---
+! Structure de base 		Done					
+- Echange client/serveur	Done				-
+- Data service				Done				-
+- Cache management			Done				-
+
+! Créateur d'histoire		Done					
+- Sélection d'histoire		Done				-
+- Visuel CRUD				Todo				Low/Medium
+- Visuel résumé				Todo				Low
+- Refacto récupération data Todo				Low
+
+! Créateur d'arbre			Done				
+- Affichage du data 		Done				-
+- Sauvegarde manuelle		Done				-
+- Sauvegarde auto			WIP					Low
+> Condition de Sauvegarde   Todo				Low
+
+! Créateur d'interaction	WIP				
+- CRUD de dialogues			WIP					High
+> Ordre de création 		Done				-
+> Changement d'ordre 		Done				-
+> Texte multi-ligne			Todo				Low/Medium
+> Changement texte			Todo				High
+- CRUD de choix				WIP					High
+> Ajout de choix			Done				-
+> Impact sur arbre			Done				-
+
+! Créateur de traits		Done
+
+! Créateur de personnages	Done
+- Changement de nom  		WIP					Medium
+> Appliquer sur dialogues   Todo				Medium
+
+--- Lecteur ---				--------			--------
+! Structure de base			WIP					
+- Création de vues			WIP					High
+- Conversion du Data		WIP					High
+
+! Affichage des dialogues	WIP
+- Interface de bulles		WIP					High
+
+! Fonctions utilitaires		Todo				
+- Sélection d'un chapite	Todo				Medium
+
+--- Serveur ---				--------			--------
+! Structure de base			Done
+- Gestion des requêtes 		Done				-
+- 
+
+! Gestion des data 			Done
+- Tranfert des data 		Done				-
+- 
+
+! Upload de fichier			Done
+- Stockage sur le serveur 	Done				-
+- Restitution des fichiers  Done				-
+
+--- Idées ---				--------			--------
+- Filtre titles/dialogs/choices
+- Ajout de condition pour passer d'une section à une autre
+	=> ou d'un saut pour un retour arrière
+- Changement d'ordre des sections d'arbre

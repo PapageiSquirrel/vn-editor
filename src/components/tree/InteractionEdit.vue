@@ -7,7 +7,7 @@
 		</div>
 
 		<div v-show="isEditing">
-			<component :is="currentComponent" :keepCache="true" @addChoice="onAddChoice" @addDialog="onAddDialog"  />
+			<component :is="currentComponent" :keepCache="true" :interactionIndex="interactionIndex" @addChoice="onAddChoice" @addDialog="onAddDialog"  />
 		</div>
 		<hr>
 	</div>

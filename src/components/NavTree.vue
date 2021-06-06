@@ -39,9 +39,6 @@ export default {
 			currentNode: null,
 		}
 	},
-	created() {
-		this.currentNode = this.tree.trunk;
-	},
 	computed: {
 		tree() {
 			if (!this.loadedData) {
@@ -57,6 +54,12 @@ export default {
 			this.tree.cursor = indexes;
 			this.currentNode = this.tree.getCurrentNode();
 		}
+	},
+	created() {
+		this.currentNode = this.tree.trunk;
+	},
+	destroyed() {
+		//this.save();
 	}
 }
 </script>

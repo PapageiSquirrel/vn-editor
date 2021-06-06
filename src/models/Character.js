@@ -1,11 +1,11 @@
 let characterId = 0;
 
 export default class Character {
-	constructor(name, description) {
+	constructor(name, description, moods) {
 		this.id = characterId++;
 		this.name = name;
 		this.description = description;
-		this.moods = [];
+		this.moods = moods && moods.map(m => new Mood(m.type)) || [];
 	}
 
 	addMood(type, fileUrl) {
@@ -24,8 +24,9 @@ export default class Character {
 }
 
 class Mood {
-	constructor(type, fileUrl) {
+	constructor(type, fileUrl, fileName) {
 		this.type = type;
 		this.fileUrl = fileUrl;
+		this.fileName = fileName;
 	}
 }

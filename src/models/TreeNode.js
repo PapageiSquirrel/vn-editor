@@ -3,15 +3,35 @@ import { Choice } from './Choice.js'
 import { Condition } from './Condition.js'
 
 export default class TreeNode {
-	constructor(index) {
+	constructor(index, title, description, interactions, isDecisive) {
 		this.id = nodeId++;
 		this.index = index;
 		this.children = [];
 		Object.assign(this, genericAttributesMixin, interactionMixin);
+
+		this.initGenericData(title, description);
+		this.initInteractionData(interactions, isDecisive);
 	}
 
 	addChild() {
 		this.children.push(new TreeNode(this.children.length));
+	}
+
+	addChildAtIndex(index, options) {
+		this.children.forEach(c => {
+			if (c.index >= index) {
+				c.index++;
+			}
+		});
+		let node = new TreeNode(index);
+		node.setAttribute("title", "Choice");
+		node.setAsDecisive();
+		options.forEach((o,i) => {
+			let childNode = new TreeNode(i);
+			childNode.setAttribute("title", o);
+			node.children.push(childNode);
+		});
+		this.children.splice(index, 0, node);
 	}
 
 	removeChild(index) {
@@ -37,6 +57,15 @@ let genericAttributesMixin = {
 	title: "Title",
 	description: "Description",
 
+	initGenericData(title, description) {
+		if (title) {
+			this.title = title;
+		}
+		if (description) {
+			this.description = description;
+		}
+	},
+
 	setAttribute(key, value) {
 		this[key] = value;
 	},
@@ -48,28 +77,61 @@ let genericAttributesMixin = {
 	}
 };
 
-let interactionMixin = {
-	dialogs: [],
-	choice: null,
-	conditions: [],
+const INTERACTION_TYPE = {
+	DIALOG: "dialog",
+	CHOICE: "choice"
+};
 
-	addDialog(index, character, mood, text) {
-		this.dialogs.splice(index, 0, new Dialog(character, mood, text));
+let interactionMixin = {
+	interactions: [],
+	conditions: [],
+	isDecisive: false,
+
+	initInteractionData(interactions, isDecisive) {
+		if (interactions) {
+			this.interactions = interactions.map(i => {
+				let interaction = {
+					type: i.type
+				};
+				if (i.type === "choice") {
+					interaction.value = new Choice(i.value.options, i.value.index, i.value.isDecisive);
+				} else {
+					interaction.value = new Dialog(i.value.character, i.value.mood, i.value.text);
+				}
+				return interaction;
+			});
+		} else {
+			this.interactions = this.interactions.slice();
+		}
+		
+		if (isDecisive != null) {
+			this.isDecisive = isDecisive;
+		}
 	},
 
-	editDialog(index, attr, value) {
-		this.dialogs[index][attr] = value;
+	addDialog(index, character, mood, text) {
+		this.interactions.splice(index, 0, {type: INTERACTION_TYPE.DIALOG, value: new Dialog(character, mood, text)});
+	},
+
+	editDialog(index, character, mood, text) {
+		this.interactions[index].character = character;
+		this.interactions[index].mood = mood;
+		this.interactions[index].text = text;
 	},
 
 	removeDialog(index) {
-		this.dialogs.splice(index, 1);
+		this.interactions.splice(index, 1);
 	},
 
-	addChoice(options) {
-		this.choice = new Choice(options);
+	addChoice(index, options, sectionIndex, isDecisive) {
+		this.interactions.splice(index, 0, {type: INTERACTION_TYPE.CHOICE, value: new Choice(options, sectionIndex, isDecisive)});
 	},
 
 	addCondition(trait, operator, value) {
 		this.conditions.push(new Condition(trait, operator, value));
+	},
+
+	setAsDecisive() {
+		this.isDecisive = true;
 	}
 };

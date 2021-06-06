@@ -6,7 +6,7 @@
 							:isClickEdit="false"
 							@edit="editElement" 
 							@save="saveElement(el, $event)"
-							style="width: 60%"></TitleInput>
+							style="width: 100%"></TitleInput>
 
 				<slot :element="el" style="display: block; width: auto;"></slot>
 
@@ -84,14 +84,17 @@ export default {
 
 ul {
 	border: solid gray 1px;
+	padding: 0px;
 }
 
-ul:before{
+ul:before {
     content:attr(aria-label);
+    display: block;
+    width: 100%;
     font-size:120%;
     font-weight:bold;
-    margin-left:-15px;
     background-color: lightgray;
+    border-bottom: 2px black solid;
 }
 
 li {

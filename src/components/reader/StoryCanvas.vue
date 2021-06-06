@@ -2,7 +2,7 @@
 	<div>
 		<CharScroller></CharScroller>
 
-		<DialogReader></DialogReader>
+		<DialogReader :storyId="1"></DialogReader>
 	</div>
 </template>
 
@@ -11,7 +11,11 @@ import CharScroller from './CharScroller.vue'
 import DialogReader from './DialogReader.vue'
 
 export default {
-	name: 'StoryCanvas'
+	name: 'StoryCanvas',
+	components: {
+		CharScroller,
+		DialogReader
+	}
 }
 </script>
 

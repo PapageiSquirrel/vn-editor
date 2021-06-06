@@ -38,6 +38,14 @@ button {
 	border: solid gray 1px;
 	border-radius: 5px;
 }
+button:hover {
+	background-color: darkgrey;
+	color: white;
+}
+button:active {
+	background-color: black;
+	color: white;
+}
 button:disabled {
 	opacity: 0;
 }

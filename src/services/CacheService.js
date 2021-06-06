@@ -7,7 +7,7 @@ class CacheService {
 	}
 
 	getCache(type, key) {
-		return this.adapters[type].getItem(key) || DEFAULT_CACHE[key];
+		return parseInt(this.adapters[type].getItem(key), 10) || DEFAULT_CACHE[key];
 	}
 
 	addToCache(type, key, value) {
@@ -42,7 +42,7 @@ const CACHE_KEY = {
 };
 
 const DEFAULT_CACHE = {
-	historyId: 0,
+	historyId: 1,
 	interactionEdit: false
 };
 

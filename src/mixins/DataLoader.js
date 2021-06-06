@@ -1,22 +1,32 @@
-import { dataService, OPERATION } from '../services/DataService.js'
+import { dataService } from '../services/DataService.js'
 
 export default {
 	data() {
 		return {
-			_params: null,
-			_collections: [],
-			_loadComplete: false,
-			_loadedDatas: []
+			params: null,
+			collections: [],
+			loadComplete: false,
+			loadedDatas: null
 		}
 	},
+	computed: {
+		computedDatas() {
+			return JSON.parse(JSON.stringify(this.loadedDatas));
+		}
+	},
+	methods: {
+		updateDatas(results) {
+			//vm.$set(vm.items, indexOfItem, newValue)
+			this.loadedDatas = results;
+			this.loadComplete = true;
+		} 
+	},
 	created() {
-		let promises = this._collections.map(col => {
-			return dataService.get(col, this._params, true);
+		let promises = this.collections.map(col => {
+			return dataService.get(col, this.params, true);
 		});
 		
-		return Promise.all(promises).then(results => {
-			this._loadedDatas = results;
-			this._loadComplete = true;
-		});
+		return Promise.all(promises)
+			.then(this.updateDatas.bind(this));
 	}
 }

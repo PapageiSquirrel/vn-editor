@@ -34,7 +34,7 @@ const choiceAdapter = {
 
 const optionAdapter = {
 	create(obj) {
-		return new Option(obj.title, obj.traitChange, obj.traitValue, obj.jumpToIndex);
+		return new Option(obj.title, obj.traitChange, obj.traitValue);
 	}
 };
 

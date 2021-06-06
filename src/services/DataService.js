@@ -8,9 +8,10 @@ import Trait from '../models/Trait.js'
 import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService.js'
 
 const API_URL = "http://localhost:45050/api/";
+const cacheServiceInstance = cacheService;
 
 class DataService {
-	constructor() { 
+	constructor() {
 		this.pendingCalls = {};
 		this.adapters = {
 			trees: treeAdapter,
@@ -26,7 +27,7 @@ class DataService {
 	
 	get(collection, params, keepCache) {
 		if (keepCache) {
-			let cache = cacheService.getCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
+			let cache = cacheServiceInstance.getCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
 			if (cache) {
 				return Promise.resolve(cache);
 			}
@@ -43,7 +44,7 @@ class DataService {
 			})
 			.finally(data => {
 				if (keepCache) {
-					cacheService.addToCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS, data)
+					cacheServiceInstance.addToCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS, data)
 				}
 			});
 
@@ -53,7 +54,7 @@ class DataService {
 
 	set(collection, operation, data, clearCache) {
 		if (clearCache) {
-			cacheService.removeFromCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
+			cacheServiceInstance.removeFromCache(CACHE_TYPE.APP, CACHE_KEY.STORY_CHARACTERS);
 		}
 
 		if (this.pendingCalls[collection]) {
@@ -95,14 +96,17 @@ const OPERATION = {
 
 const treeAdapter = {
 	addIdentifier(data) {
-		data.id |= cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		data.id |= cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 		return data;
 	},
 	getIdentifier(data) {
-		return data && data.id || cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return data && data.id || cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
-		return result && new Tree(result.trunk, result.name);
+		if (Array.isArray(result)) {
+			return result.map(r => new Tree(r.id, r.trunk, r.name));
+		}
+		return result && new Tree(result.id, result.trunk, result.name);
 	},
 	create() {
 		return new Tree();
@@ -118,10 +122,10 @@ const characterAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
-		return result && result.data ? result.data.map(c => new Character(c.name, c.description)) : [];
+		return result && result.data ? result.data.map(c => new Character(c.name, c.description, c.moods)) : [];
 	},
 	create() {
 		return new Character("New Character", "description of the character");
@@ -152,7 +156,7 @@ const traitAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Trait(c.name, c.steps)) : [];

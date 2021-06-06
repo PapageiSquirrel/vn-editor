@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<nav>
-			<button v-for="view in views" class="button"  style="width: 50%"
-				:key="view"
-				:class="{ active: currentView === view }"
+			<button v-for="view in views" class="nav-button" style="width: 25%"
+				:key="view.component"
+				:class="{ navActive: currentView === view.component }"
 				:disabled="!storyOverview"
-				@click="currentView = view">{{view}}</button>
+				@click="currentView = view.component">{{view.label}}</button>
 		</nav>
 
 		<div v-if="!!storyOverview" class="card-bordered">
-			<h3>{{ storyOverview ? storyOverview.name : "" }}</h3>
+			<h1 style="letter-spacing: 3px; text-align: center;">{{ storyOverview ? storyOverview.name : "" }}</h1>
 		</div>
 
 		<ToolBox></ToolBox>
@@ -39,7 +39,12 @@ export default {
 	data() {
 		return {
 			currentView: 'NavHistory',
-			views: ['NavHistory', 'NavTree', 'NavCharacter', 'NavTrait'],
+			views: [
+				{label: "Stories", component: 'NavHistory'}, 
+				{label: "Dialog Tree", component: 'NavTree'}, 
+				{label: "Characters", component: 'NavCharacter'}, 
+				{label: "Traits", component: 'NavTrait'}
+			],
 			storyOverview: null
 		}
 	},
@@ -58,5 +63,26 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+textarea {
+	min-height: 16px;
+	max-height: 240px;
+	min-width: 5%;
+	max-width: 99%;
+	width: 99%;
+	background-color: #dee5ff;
+	overflow-y: auto;
+}
 
+.nav-button {
+
+}
+.nav-button:active:not([disabled]) {
+	background-color: lightgray;
+}
+.nav-button:active:hover:not([disabled]) {
+	background-color: lightgray;
+}
+.navActive {
+	background-color: lightgray;
+}
 </style>

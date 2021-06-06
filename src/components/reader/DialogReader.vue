@@ -1,18 +1,24 @@
 <template>
 	<div>
-		<ul>
-			<li v-for="d in dialogHistory">
-				<div class="char"><b>{{d.character}}</b></div>
-				<div class="text">{{d.text}}</div>
+		<div class="interactionContainer">
+			<ul>
+				<li v-for="(d, index) in interactionHistory" :key="index">
+					<div class="char"><b>{{d.character}}</b></div>
+					<div class="text">{{d.text}}</div>
+				</li>
+			</ul>
+		</div>
+
+		<ul v-show="isChoiceNeeded">
+			<li v-for="(option, index) in choiceOptions" :key="option.id">
+				<button @click="makeAChoice(index, option)">{{ option.title }}</button>
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
-import DataLoader from '../mixins/DataLoader.js'
-
-import ChoiceMaker from './ChoiceMaker.vue'
+import DataLoader from '../../mixins/DataLoader.js'
 
 export default {
 	name: 'DialogReader',
@@ -24,57 +30,93 @@ export default {
 	},
 	data() {
 		return {
-			_params: null,
-			_collections: ["trees", "characters", "traits"],
-			dialogCursor: 0,
-			dialogHistory: [],
-			choice: null
+			params: null,
+			collections: ["trees", "characters", "traits"],
+			interactionCursor: 0,
+			interactionHistory: []
 		}
 	},
 	computed: {
-		trees() {
-			return this._loadedDatas[0];
+		tree() {
+			return this.loadedDatas && this.loadedDatas[0];
 		},
 		characters() {
-			return this._loadedDatas[1];
+			return this.loadedDatas && this.loadedDatas[1];
 		},
 		traits() {
-			return this._loadedDatas[2];
+			return this.loadedDatas && this.loadedDatas[2];
 		},
-		tree() {
-			return this.trees.find(t => t.storyId);
+		treeNode() {
+			return this.tree && this.tree.getCurrentNode();
 		},
-		dialogs() {
-			let node = this.tree.getCurrentNode();
-			return node.dialogs;
+		interactions() {
+			return this.treeNode && this.treeNode.interactions;
 		},
-		currentDialog() {
-			return this.dialogs[dialogCursor];
+		currentInteraction() {
+			return this.interactions && this.interactions[this.interactionCursor];
+		},
+		choiceOptions() {
+			return this.isChoiceNeeded && this.currentInteraction.value.options;
+		},
+		mainCharacter() {
+			return this.characters[0];
+		},
+		isChoiceNeeded() {
+			return this.currentInteraction && this.currentInteraction.type === "choice";
 		}
 	},
 	methods: {
-		showNextDialog() {
-			this.dialogHistory.push(this.currentDialog);
-			// TODO: Animate new dialog creation and text
-			let hasGoneUp = this.tree.goNext();
-			if (hasGoneUp) {
-				this.choice = this.tree.choice
-				dialogCursor = 0;
-			} else {
-				dialogCursor++;
+		showNextInteraction() {
+			if (!this.loadedDatas) {
+				return;
 			}
+
+			if (!this.currentInteraction) {
+				if (this.tree) {
+					this.tree.goNext();
+				}
+				this.interactionCursor = 0;
+			}
+
+			if (!this.currentInteraction) {
+				return;
+			}
+
+			if (this.currentInteraction.type === "dialog") {
+				this.interactionHistory.push(this.currentInteraction.value);
+				this.interactionCursor++;
+			}
+		},
+		makeAChoice(index, option) {
+			this.interactionHistory.push({character: this.mainCharacter.name, text: option.title});
+			this.currentInteraction.value.isDecisive ? this.tree.goTo([this.currentInteraction.value.index, index]) : this.interactionCursor++;
 		}
 	},
 	created() {
-		window.addEventListener('onclick', this.showNextDialog);
+		window.addEventListener('click', this.showNextInteraction);
 		this.params = this.storyId;
 	},
-	destroyed: function() {
-		window.removeEventListener('onclick', this.showNextDialog);
+	destroyed() {
+		window.removeEventListener('click', this.showNextInteraction);
 	}
 }
 </script>
 
 <style lang="css" scoped>
+ul {
+	list-style:none;
+	vertical-align: bottom;
+}
 
+li {
+	bottom: 0px;
+}
+
+.interactionContainer {
+	height: 320px;
+	max-height: 320px;
+	overflow-y: hidden;
+	display: flex;
+	flex-direction: column-reverse;
+}
 </style>
