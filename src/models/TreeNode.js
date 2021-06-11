@@ -114,9 +114,10 @@ let interactionMixin = {
 	},
 
 	editDialog(index, character, mood, text) {
-		this.interactions[index].character = character;
-		this.interactions[index].mood = mood;
-		this.interactions[index].text = text;
+		let dialog = this.interactions[index];
+		dialog.value.character = character;
+		dialog.value.mood = mood;
+		dialog.value.text = text;
 	},
 
 	removeDialog(index) {

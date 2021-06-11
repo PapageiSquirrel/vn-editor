@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-for="hist in histories" :key="hist.id" class="card-bordered" :class="{ selected: isSelectedStory(hist) }" style="display: flex;">
-			<button class="button-clear button-icon" @click="select(hist)">
+			<button class="button button-clear button-icon" @click="select(hist)">
 				<font-awesome-icon icon="thumbtack" />
 			</button>
 			<div style="width: 100%;">
@@ -9,7 +9,7 @@
 					<TitleInput :title="hist.name" 
 						:titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" 
 						:isClickEdit="false" @save="hist.name = $event"  style="width: 100%;"></TitleInput>
-					<button class="button-clear button-icon" @click="remove(hist)" style="float: right;">
+					<button class="button button-clear button-icon" @click="remove(hist)" style="float: right;">
 						<font-awesome-icon icon="times" />
 					</button>
 				</div>
@@ -67,6 +67,6 @@ export default {
 	
 }
 .selected {
-	background-color: #CCC;
+	background-color: var(--primary-color);
 }
 </style>

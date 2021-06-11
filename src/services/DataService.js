@@ -125,7 +125,7 @@ const characterAdapter = {
 		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
-		return result && result.data ? result.data.map(c => new Character(c.name, c.description, c.moods)) : [];
+		return result && result.data ? result.data.map(c => new Character(c.name, c.description, c.color, c.moods)) : [];
 	},
 	create() {
 		return new Character("New Character", "description of the character");

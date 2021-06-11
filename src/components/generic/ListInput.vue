@@ -72,14 +72,14 @@ export default {
 
 <style lang="css" scoped>
 .inputDisplay {
-	background-color: rgba(0,0,0, 0);
+	background-color: rgba(var(--bg-rgb), 0);
 	cursor: pointer;
 }
 .inputDisplay:hover {
-	background-color: rgba(0,0,0, .25);
+	background-color: rgba(var(--bg-rgb), .25);
 }
 .inputDisplay:active {
-	background-color: rgba(0,0,0, .5);
+	background-color: rgba(var(--bg-rgb), .5);
 }
 
 ul {
@@ -93,7 +93,9 @@ ul:before {
     width: 100%;
     font-size:120%;
     font-weight:bold;
-    background-color: lightgray;
+    background-color: var(--primary-color);
+    color: var(--font-color);
+    text-align: center;
     border-bottom: 2px black solid;
 }
 

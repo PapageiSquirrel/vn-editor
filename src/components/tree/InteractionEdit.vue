@@ -2,8 +2,8 @@
 	<div>
 		<hr>
 		<div class="interval" @mouseover="isHovering = true" @mouseleave="isHovering = false">
-			<button v-show="isHovering" class="button button-white" style="width: 50%" @click="newDialog()">Dialog</button>
-			<button v-show="isHovering" class="button button-white" style="width: 50%" @click="newChoice()">Choice</button>
+			<button v-show="isHovering" class="button button-primary" style="width: 50%" @click="newDialog()">Dialog</button>
+			<button v-show="isHovering" class="button button-primary" style="width: 50%" @click="newChoice()">Choice</button>
 		</div>
 
 		<div v-show="isEditing">

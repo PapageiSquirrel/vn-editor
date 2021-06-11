@@ -1,10 +1,11 @@
 let characterId = 0;
 
 export default class Character {
-	constructor(name, description, moods) {
+	constructor(name, description, color, moods) {
 		this.id = characterId++;
 		this.name = name;
 		this.description = description;
+		this.color = color || "#cc8800";
 		this.moods = moods && moods.map(m => new Mood(m.type)) || [];
 	}
 

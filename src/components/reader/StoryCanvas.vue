@@ -1,8 +1,10 @@
 <template>
 	<div>
-		<CharScroller></CharScroller>
+		<CharScroller class="body"></CharScroller>
 
-		<DialogReader :storyId="1"></DialogReader>
+		<footer>
+			<DialogReader :storyId="1"></DialogReader>
+		</footer>
 	</div>
 </template>
 
@@ -20,5 +22,18 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.body {
+	position:fixed;
+	height: 600px;
+	width: 99%;
+}
 
+footer {
+  position: fixed;
+  bottom: 0;
+  background-color: var(--primary-color);
+  width: 99%;
+  border-top: solid 2px black;
+  padding-top: 4px;
+}
 </style>

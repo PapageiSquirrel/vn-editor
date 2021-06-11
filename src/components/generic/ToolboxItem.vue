@@ -1,9 +1,9 @@
 <template>
 	<div class="toolbox">
-		<button class="button" @click="toolAdd"><font-awesome-icon icon="plus" /></button>
-		<button class="button" :disabled="!nbUndos" @click="toolUndo">{{nbUndos}} <font-awesome-icon icon="history" /></button>
-		<button class="button" @click="toolSave"><font-awesome-icon icon="save" /></button>
-		<button class="button" @click="toolUpload"><font-awesome-icon icon="file-upload" /></button>
+		<button class="button button-primary" @click="toolAdd"><font-awesome-icon icon="plus" /></button>
+		<button class="button button-primary" :disabled="!nbUndos" @click="toolUndo">{{nbUndos}} <font-awesome-icon icon="history" /></button>
+		<button class="button button-primary" @click="toolSave"><font-awesome-icon icon="save" /></button>
+		<button class="button button-primary" @click="toolUpload"><font-awesome-icon icon="file-upload" /></button>
 	</div>
 </template>
 

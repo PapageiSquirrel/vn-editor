@@ -19,7 +19,7 @@
 
 			<div v-if="interaction.type === 'dialog'" v-show="!isEditedElement(index)" style="display: flex;">
 				<ReorderingButtons style="width: 10%" :index="index" :length="simpleInteractions.length" @reorder="onReorder($event, index)"></ReorderingButtons>
-				<p style="width: 90%;"><b>{{interaction.value.character + " (" + interaction.value.mood + "): "}}</b>{{interaction.value.text}}</p>
+				<p style="width: 90%;"><b>{{interaction.value.character + (interaction.value.mood ? " (" + interaction.value.mood + ")" : "") + ": "}}</b>{{interaction.value.text}}</p>
 				<button class="button button-icon button-green" @click="editOrUpdate(index)">
 					<font-awesome-icon icon="edit" />
 				</button>

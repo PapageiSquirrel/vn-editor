@@ -85,13 +85,18 @@ export default {
 
 <style lang="css" scoped>
 .inputDisplay {
-	background-color: rgba(0,0,0, 0);
+	background-color: rgba(var(--font-rgb), 0);
 	cursor: pointer;
 }
 .inputDisplay:hover {
-	background-color: rgba(0,0,0, .25);
+	background-color: rgba(var(--font-rgb), .25);
 }
 .inputDisplay:active {
-	background-color: rgba(0,0,0, .5);
+	background-color: rgba(var(--font-rgb), .5);
+}
+
+.inputEdit {
+	background-color: var(--primary-color);
+	color: var(--font-color);
 }
 </style>

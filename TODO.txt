@@ -12,6 +12,7 @@
 
 ! Créateur d'arbre			Done				
 - Affichage du data 		Done				-
+> Ajout de background		Todo				Medium
 - Sauvegarde manuelle		Done				-
 - Sauvegarde auto			WIP					Low
 > Condition de Sauvegarde   Todo				Low
@@ -21,7 +22,7 @@
 > Ordre de création 		Done				-
 > Changement d'ordre 		Done				-
 > Texte multi-ligne			Todo				Low/Medium
-> Changement texte			Todo				High
+> Changement texte			Todo				-
 - CRUD de choix				WIP					High
 > Ajout de choix			Done				-
 > Impact sur arbre			Done				-
@@ -31,6 +32,7 @@
 ! Créateur de personnages	Done
 - Changement de nom  		WIP					Medium
 > Appliquer sur dialogues   Todo				Medium
+- Chiosir couleur dbox		Todo				Low
 
 --- Lecteur ---				--------			--------
 ! Structure de base			WIP					
@@ -39,9 +41,20 @@
 
 ! Affichage des dialogues	WIP
 - Interface de bulles		WIP					High
+> Portraits personnages		Todo				-
+> Boite de dialogues		WIP					-
+- Interface de choix		WIP					High
+> Création de l'interface	WIP					-
+> Style visuel améliorer	Todo				Medium
 
 ! Fonctions utilitaires		Todo				
 - Sélection d'un chapite	Todo				Medium
+
+--- UX ---					--------			--------
+! Selection de thème		Todo				Low/Medium
+- Choix des thèmes			WIP					
+- Interface de sélection	Todo
+- Appliquer à tout			Todo
 
 --- Serveur ---				--------			--------
 ! Structure de base			Done

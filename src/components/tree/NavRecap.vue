@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="save"><font-awesome-icon icon="save" /></button>
+    <button class="button button-icon button-primary" @click="save"><font-awesome-icon icon="save" /></button>
     <b>{{getSelectedRecap}}</b>
   </div>
 </template>

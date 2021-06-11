@@ -12,6 +12,6 @@ export default {
 
 <style lang="css" scoped>
 .backgroundContainer {
-	height: 400px;
+	background-color: var(--bg-color);
 }
 </style>

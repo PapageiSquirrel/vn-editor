@@ -2,11 +2,11 @@
 	<div style="display: flex; padding-right: 5px;">
 		<input type="file" name="fileInput" :id="id" class="input-file" ref="file" @change="onFileChange" />
 		<label :for="id"><font-awesome-icon icon="file-image" /></label>
-		<i>{{fileLabel || uploadLabel}}</i>
-		<button @click="upload">
+		<i style="color: #ccc">{{fileLabel || uploadLabel}}</i>
+		<button class="button-icon button-primary" @click="upload">
 			<font-awesome-icon icon="file-upload" />
 		</button>
-		<button @click="preview">
+		<button class="button-icon button-primary" @click="preview">
 			<font-awesome-icon icon="eye" />
 		</button>
 

@@ -7,7 +7,7 @@
 			<option v-for="m in moods" :key="m.type">{{m.type}}</option>
 		</select>
 		<input type="text" v-model="text" style="width: 60%" />
-		<button @click="save">Ok</button>
+		<button class="button-icon button-primary" @click="save"><font-awesome-icon icon="save" /></button>
 	</div>
 </template>
 

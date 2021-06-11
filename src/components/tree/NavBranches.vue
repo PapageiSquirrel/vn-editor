@@ -16,14 +16,14 @@
 		<textarea v-model="node.description"></textarea>
 
 		<div v-show="!isOpen">
-			<button class="button button-white" @click="toggleSubNodes()">
+			<button class="button button-primary" @click="toggleSubNodes()">
 				<span v-show="node.hasChildren()">open ({{node.getNumberOfChildren()}})</span>
 				<span v-show="!node.hasChildren()">create sub-section</span>
 			</button>
 		</div>
 
 		<div v-show="isOpen">
-			<button class="button button-white" @click="untoggleSubNodes()">Close sub-sections</button>
+			<button class="button button-primary" @click="untoggleSubNodes()">Close sub-sections</button>
 
 			<div>          
 				<NavBranches v-for="(childNode, nodeIndex) in node.children" :key="nodeIndex"
@@ -35,7 +35,8 @@
 						@onNodeSelection="selectNode($event)"
 						@onReorder="reorderChildren($event)"
 						style="margin-bottom: 20px;"></NavBranches>
-				<button class="button button-white" @click="node.addChild()">add</button>
+						
+				<button class="button button-primary" @click="node.addChild()">add</button>
 			</div>
 		</div>
 
@@ -80,7 +81,8 @@ export default {
 				return 'rgb(200, 60, 80)';
 			}
 
-			let color = (256- this.depth * this.colorRatio).toString();
+			// TODO: adapt depending on the theme selected
+			let color = (this.depth * this.colorRatio).toString();
 			return 'rgb(' + color + ',' + color + ',' + color + ')';
 		},
 		isNodeSelected: function() {

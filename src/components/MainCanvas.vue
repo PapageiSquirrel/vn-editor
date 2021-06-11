@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<nav>
-			<button v-for="view in views" class="nav-button" style="width: 25%"
+			<button v-for="view in views" class="button-primary-nohover nav-button" style="width: 25%"
 				:key="view.component"
 				:class="{ navActive: currentView === view.component }"
 				:disabled="!storyOverview"
@@ -69,7 +69,7 @@ textarea {
 	min-width: 5%;
 	max-width: 99%;
 	width: 99%;
-	background-color: #dee5ff;
+	background-color: var(--secondary-color);
 	overflow-y: auto;
 }
 
@@ -77,12 +77,12 @@ textarea {
 
 }
 .nav-button:active:not([disabled]) {
-	background-color: lightgray;
+	background-color: var(--secondary-color);
 }
 .nav-button:active:hover:not([disabled]) {
-	background-color: lightgray;
+	background-color: var(--secondary-color);
 }
 .navActive {
-	background-color: lightgray;
+	background-color: var(--secondary-color);
 }
 </style>
