@@ -1,13 +1,9 @@
 <template>
 	<div style="display:flex;">
-		<select v-model="character" style="width: 20%">
-			<option v-for="c in characters" :key="c.id">{{c.name}}</option>
-		</select>
-		<select v-model="mood" style="width: 20%">
-			<option v-for="m in moods" :key="m.type">{{m.type}}</option>
-		</select>
-		<input type="text" v-model="text" style="width: 60%" />
-		<button class="button-icon button-primary" @click="save"><font-awesome-icon icon="save" /></button>
+		<v-select v-model="character" :items="characters" item-text="name" item-value="name" label="Character" />
+		<v-select v-model="mood" :items="moods" item-text="type" item-value="type" label="Mood" />
+		<v-text-field v-model="text" label="Text" />
+		<v-btn fab color="primary" @click="save"><font-awesome-icon icon="save" /></v-btn>
 	</div>
 </template>
 

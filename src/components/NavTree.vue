@@ -1,6 +1,6 @@
 <template>
-	<div class="grid">
-		<div class="tree">
+	<v-container class="grid">
+		<div class="tree" v-show="showTree" :style="{ width: nodeWidth(showTree) }">
 			<NavRecap :tree="tree" @save="save"></NavRecap>
 
 			<NavBranches 
@@ -12,8 +12,8 @@
 				@onNodeSelection="cursorUpdate($event)"></NavBranches>
 		</div>
 
-		<NodeDialogs class="dialogs" :node="currentNode"></NodeDialogs>
-	</div>
+		<NodeDialogs v-show="showDialogs" class="dialogs" :node="currentNode" :style="{ width: nodeWidth(showDialogs) }"></NodeDialogs>
+	</v-container>
 </template>
 
 <script>
@@ -33,10 +33,15 @@ export default {
 		NavBranches,
 		NodeDialogs
 	},
+	props: {
+		showTree: Boolean,
+		showDialogs: Boolean,
+		showTriggers: Boolean,
+		showExplorations: Boolean
+	},
 	data() {
 		return {
-			collection: "trees",
-			currentNode: null,
+			collection: "trees"
 		}
 	},
 	computed: {
@@ -45,6 +50,12 @@ export default {
 				this.add();
 			}
 			return this.loadedData;
+		},
+		currentNode() {
+			return this.tree && this.tree.getCurrentNode();
+		},
+		numberOfComponents() {
+			return Number(this.showTree) + Number(this.showDialogs) + Number(this.showTriggers) + Number(this.showExplorations);
 		}
 	},
 	methods: {
@@ -52,11 +63,10 @@ export default {
 			// remove trunk from indexes
 			indexes.splice(0, 1);
 			this.tree.cursor = indexes;
-			this.currentNode = this.tree.getCurrentNode();
+		},
+		nodeWidth(isShown) {
+			return isShown && this.numberOfComponents === 1 ? "100%" : "50%";
 		}
-	},
-	created() {
-		this.currentNode = this.tree.trunk;
 	},
 	destroyed() {
 		//this.save();
@@ -71,12 +81,10 @@ export default {
 }
 
 .tree {
-	width: 40%;
 	text-align: left;
 }
 
 .dialogs {
-	width: 60%;
 	border: solid 1px black;
 	margin: 20px;
 }

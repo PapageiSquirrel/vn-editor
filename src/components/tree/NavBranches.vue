@@ -1,4 +1,4 @@
-	<template>
+<template>
 	<div class="bordered paddingLg" :style="{ backgroundColor: backgroundColor }">
 		<div style="display: flex">
 			<ReorderingButtons style="width: 20%" v-show="branchLength > 1" :index="nodeIndex" :length="branchLength"
@@ -7,23 +7,31 @@
 			<NodeHead class="noPadding" style="width: 100%; margin-left: 5%; margin-right: 5%;"
 				:backgroundColor="backgroundColor" 
 				:node="node" 
+				:traits="traits"
 				:isSelected="isNodeSelected"
 				@onNodeSelection="selectNode"
 				@onNodeEdition="editNode"
 				@onNodeDeletion="deleteNode"></NodeHead>
 		</div>
 
-		<textarea v-model="node.description"></textarea>
+		<ListSelectInput :elements="node.conditions" :elType="'condition'" :elKey="'trait'" :elList="traits">
+			<template v-slot:default="slotProps">
+				<v-select v-model="slotProps.element.operator" :items="operators" style="margin-left: 5%; margin-right: 5%;" />
+				<v-text-field type="number" v-model="slotProps.element.value" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
+			</template>
+		</ListSelectInput>
+
+		<v-textarea v-model="node.description" rows="1"></v-textarea>
 
 		<div v-show="!isOpen">
-			<button class="button button-primary" @click="toggleSubNodes()">
-				<span v-show="node.hasChildren()">open ({{node.getNumberOfChildren()}})</span>
+			<v-btn class="button button-primary" @click="toggleSubNodes()">
+				<span v-show="node.hasChildren()">open sub-sections ({{node.getNumberOfChildren()}})</span>
 				<span v-show="!node.hasChildren()">create sub-section</span>
-			</button>
+			</v-btn>
 		</div>
 
 		<div v-show="isOpen">
-			<button class="button button-primary" @click="untoggleSubNodes()">Close sub-sections</button>
+			<v-btn class="button button-primary" @click="untoggleSubNodes()">Close sub-sections ({{node.getNumberOfChildren()}})</v-btn>
 
 			<div>          
 				<NavBranches v-for="(childNode, nodeIndex) in node.children" :key="nodeIndex"
@@ -36,26 +44,41 @@
 						@onReorder="reorderChildren($event)"
 						style="margin-bottom: 20px;"></NavBranches>
 						
-				<button class="button button-primary" @click="node.addChild()">add</button>
+				<v-btn class="button button-primary" @click="node.addChild()">add sub-section</v-btn>
 			</div>
 		</div>
 
-		<NodeFoot :node="node"></NodeFoot>
+		<ListSelectInput :elements="node.triggers" :elType="'condition'" :elKey="'trait'" :elList="traits">
+			<template v-slot:default="slotProps">
+				<v-select v-model="slotProps.element.operator" :items="operators" style="margin-left: 5%; margin-right: 5%;" />
+				<v-text-field type="number" v-model="slotProps.element.value" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
+			</template>
+		</ListSelectInput>
+
+		<NodeFoot v-if="false" :node="node"></NodeFoot>
 	</div>
 </template>
 
 <script>
+import { dataService, COLLECTION } from '../../services/DataService.js'
+
+import { OPERATOR } from '../../models/Condition.js'
+
 import NodeHead from './NodeHead.vue'
 import NodeFoot from './NodeFoot.vue'
 
 import ReorderingButtons from '../generic/ReorderingButtons.vue'
+import ListSelectInput from '../generic/ListSelectInput.vue'
+
+const operators = Object.values(OPERATOR);
 
 export default {
 	name: 'NavBranches',
 	components: {
 		NodeHead,
 		NodeFoot,
-		ReorderingButtons
+		ReorderingButtons,
+		ListSelectInput
 	},
 	props: {
 		nodeIndex: Number,
@@ -69,7 +92,9 @@ export default {
 		return {
 			isOpen: false,
 			leftStepMargin: 50,
-			colorRatio: 32
+			colorRatio: 32,
+			operators: operators,
+			traits: []
 		}
 	},
 	computed: {
@@ -112,6 +137,12 @@ export default {
 		onReorder(index) {
 			this.$emit("onReorder", {previous: this.nodeIndex, next: index});
 		}
+	},
+	created() {
+		dataService.get(COLLECTION.TRAITS, null, true)
+			.then(result => {
+				this.traits = result.map(t => t.name);
+			});
 	}
 }
 </script>

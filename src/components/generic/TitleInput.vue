@@ -1,17 +1,17 @@
 <template>
-	<div>
-		<div v-show="!isEditMode" width="display:flex;">
-			<button class="button-flat button-clear inputDisplay" :style="titleStyle" @click="selectOrEdit" style="width: 90%">{{title}}</button>
-			<button v-show="isClickEdit" class="button button-icon button-green" @click="edit">
-				<font-awesome-icon icon="edit" /></button>
-			<button v-show="isDeletable" class="button button-icon button-red" @click="deleteTitle">
+	<v-container>
+		<v-container v-show="!isEditMode">
+			<v-btn depressed :style="titleStyle" @click="selectOrEdit">{{title}}</v-btn>
+			<v-btn icon v-show="isClickEdit" @click="edit">
+				<font-awesome-icon icon="edit" /></v-btn>
+			<v-btn icon v-show="isDeletable" @click="deleteTitle">
 				<font-awesome-icon icon="times" />
-			</button>
-		</div>
-		<div v-show="isEditMode">
-			<input ref="editInput" class="inputEdit" type="text" v-model="newTitle" :placeholder="placeholderOrDefault" @keydown="save" @focusout="save" />
-		</div>
-	</div>
+			</v-btn>
+		</v-container>
+		<v-container v-show="isEditMode">
+			<v-text-field outlined ref="editInput" v-model="newTitle" :style="titleStyle" :placeholder="placeholderOrDefault" @keydown="save" @focusout="save" />
+		</v-container>
+	</v-container>
 </template>
 
 <script>
@@ -84,19 +84,5 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.inputDisplay {
-	background-color: rgba(var(--font-rgb), 0);
-	cursor: pointer;
-}
-.inputDisplay:hover {
-	background-color: rgba(var(--font-rgb), .25);
-}
-.inputDisplay:active {
-	background-color: rgba(var(--font-rgb), .5);
-}
 
-.inputEdit {
-	background-color: var(--primary-color);
-	color: var(--font-color);
-}
 </style>

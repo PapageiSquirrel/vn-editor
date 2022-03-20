@@ -2,11 +2,7 @@
 	<div>
 		<ul :aria-label="listTitle">
 			<li v-for="(el, index) in elements" :key="el[elKey]">
-				<TitleInput :title="el[elKey]" 
-							:isClickEdit="false"
-							@edit="editElement" 
-							@save="saveElement(el, $event)"
-							style="width: 100%"></TitleInput>
+				<v-select v-model="el[elKey]" :items="elList" />
 
 				<slot :element="el" style="display: block; width: auto;"></slot>
 
@@ -16,24 +12,20 @@
 			</li>
 
 			<li v-show="!isEditing">
-				<TitleInput :title="newElement" :placeholder="placeholder" :forceEditMode="true" @save="addElement"></TitleInput>
+				<v-select v-model="newElement" :items="elList" @change="addElement(newElement)" placeholder="New Condition" style="margin-left: 5%; margin-right: 5%;" />
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
-import TitleInput from './TitleInput.vue'
-
 export default {
-	name: 'ListInput',
-	components: {
-		TitleInput
-	},
+	name: 'ListSelectInput',
 	props: {
 		elements: Array,
 		elType: String,
-		elKey: String
+		elKey: String,
+		elList: Array
 	},
 	data: function() {
 		return {
@@ -54,14 +46,7 @@ export default {
 			let newEl = {};
 			newEl[this.elKey] = value;
 			this.elements.push(newEl);
-			this.newElement = "";
-		},
-		saveElement(el, event) {
-			el[this.elKey] = event;
-			this.isEditing = false;
-		},
-		editElement() {
-			this.isEditing = true;
+			this.$nextTick(() => this.newElement = 0);
 		},
 		deleteElement(index) {
 			this.elements.splice(index, 1);

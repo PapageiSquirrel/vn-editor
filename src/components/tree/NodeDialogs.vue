@@ -17,15 +17,15 @@
 				</p>
 			</div>
 
-			<div v-if="interaction.type === 'dialog'" v-show="!isEditedElement(index)" style="display: flex;">
+			<div v-if="interaction.type === 'dialog'" v-show="!isEditedElement(index)" style="display: flex; justify-content: center; align-items: center;">
 				<ReorderingButtons style="width: 10%" :index="index" :length="simpleInteractions.length" @reorder="onReorder($event, index)"></ReorderingButtons>
-				<p style="width: 90%;"><b>{{interaction.value.character + (interaction.value.mood ? " (" + interaction.value.mood + ")" : "") + ": "}}</b>{{interaction.value.text}}</p>
-				<button class="button button-icon button-green" @click="editOrUpdate(index)">
+				<p class="dialog" style="width: 90%; vertical-align: middle;"><b>{{interaction.value.character + (interaction.value.mood ? " (" + interaction.value.mood + ")" : "") + ": "}}</b>{{interaction.value.text}}</p>
+				<v-btn icon @click="editOrUpdate(index)">
 					<font-awesome-icon icon="edit" />
-				</button>
-				<button class="button button-icon button-red" @click="node.removeDialog(index)">
+				</v-btn>
+				<v-btn icon @click="node.removeDialog(index)">
 					<font-awesome-icon icon="times" />
-				</button>
+				</v-btn>
 			</div>
 		</div>
 
@@ -78,9 +78,9 @@ export default {
 		isEditedElement(index) {
 			return this.editIndex === index;
 		},
-		onNewInteraction(event) {
+		onNewInteraction() {
 			cacheService.addToCache(CACHE_TYPE.APP, CACHE_KEY.INTERACTION_EDIT, true);
-			this.editIndex = event;
+			this.editIndex = -1;
 		},
 		onAddDialog(event) {
 			this.node.addDialog(event.index, event.dialog.character, event.dialog.mood, event.dialog.text);
@@ -91,7 +91,7 @@ export default {
 			let sectionIndex = -1;
 			if (event.choice.isDecisive) {
 				sectionIndex = this.node.interactions.filter(i => this.isDecisiveChoice(i)).length;
-				this.node.addChildAtIndex(sectionIndex, event.choice.options.map(o => o.title + " (" + (Math.sign(o.traitValue) !== -1 ? "+" : "") + o.traitValue + " " + o.traitChange + ")"));
+				this.node.addChildAtIndex(sectionIndex, event.choice.options);
 			}
 			this.node.addChoice(event.index, event.choice.options, sectionIndex, event.choice.isDecisive);
 			
@@ -115,14 +115,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-p {
-	margin: 2px;
-}
-
-p:hover {
-	background-color: lightgray;
-}
-
 .decisiveChoice {
 	color: #4f000f
 }

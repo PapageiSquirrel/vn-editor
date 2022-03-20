@@ -9,13 +9,10 @@
 		</div>
 
 		<div v-show="editMode">
-			<div v-show="options.length > 0" v-for="(option, index) in options" :key="option.id" class="optionContainer">
-				<b>{{index+1}}</b>
-				<input type="text" v-model="option.title" style="width: 70%" placeholder="Option label" />
-				<select v-model="option.traitChange" style="width: 20%" placeholder="Trait">
-					<option v-for="t in traits" :key="t.id">{{t.name}}</option>
-				</select>
-				<input type="number" v-model="option.traitValue" style="width: 10%" />
+			<div v-show="options.length > 0" v-for="option in options" :key="option.id" class="optionContainer">
+				<v-text-field type="text" v-model="option.title" placeholder="Option label" />
+				<v-select v-model="option.traitChange" :items="traits" style="margin-left: 5%; margin-right: 5%;" placeholder="Trait to change" />
+				<v-text-field type="number" v-model="option.traitValue" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
 			</div>
 			
 			<div style="display: block-inline">

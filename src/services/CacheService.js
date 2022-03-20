@@ -1,3 +1,5 @@
+import { COLLECTION } from './DataService.js'
+
 class CacheService {
 	constructor() {
 		this.adapters = {};
@@ -8,6 +10,17 @@ class CacheService {
 
 	getCache(type, key) {
 		return parseInt(this.adapters[type].getItem(key), 10) || DEFAULT_CACHE[key];
+	}
+
+	getCacheKeyByCollection(collection) {
+		switch(collection) {
+			case COLLECTION.HISTORIES:
+				return CACHE_KEY.HISTORY_IDENTIFIER;
+			case COLLECTION.CHARACTERS:
+				return CACHE_KEY.STORY_CHARACTERS;
+			case COLLECTION.TRAITS:
+				return CACHE_KEY.STORY_TRAITS;
+		}
 	}
 
 	addToCache(type, key, value) {
@@ -38,6 +51,7 @@ const CACHE_TYPE = {
 const CACHE_KEY = {
 	HISTORY_IDENTIFIER: "historyId",
 	STORY_CHARACTERS: "storyCharacters",
+	STORY_TRAITS: "storyTraits",
 	INTERACTION_EDIT: "interactionEdit"
 };
 

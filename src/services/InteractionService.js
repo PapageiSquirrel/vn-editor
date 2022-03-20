@@ -1,6 +1,7 @@
 import Dialog from '../models/TreeNode.js';
 import { Choice, Option } from '../models/Choice.js';
 import { Condition } from '../models/Condition.js';
+import Exploration from '../models/Exploration.js';
 
 class InteractionService {
 	constructor() {
@@ -8,7 +9,8 @@ class InteractionService {
 			dialogs: dialogAdapter,
 			choices: choiceAdapter,
 			options: optionAdapter,
-			conditions: conditionAdapter
+			conditions: conditionAdapter,
+			explorations: explorationAdapter
 		}
 	}
 }
@@ -17,7 +19,8 @@ const INTERACTION_TYPE = {
 	DIALOG: "dialogs",
 	CHOICE: "choices",
 	OPTION: "options",
-	CONDITION: "condition"
+	CONDITION: "condition",
+	EXPLORATION: "exploration"
 }
 
 const dialogAdapter = {
@@ -43,6 +46,12 @@ const conditionAdapter = {
 		return new Condition(obj.trait, obj.operator, obj.value);
 	}
 };
+
+const explorationAdapter = {
+	create(obj) {
+		return new Exploration(obj.location, obj.conversations, obj.actions, obj.limit)
+	}
+}
 
 const interactionService = new InteractionService();
 export { interactionService, INTERACTION_TYPE };

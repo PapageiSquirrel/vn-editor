@@ -1,14 +1,12 @@
 <template>
 	<div style="display: flex; padding-right: 5px;">
-		<input type="file" name="fileInput" :id="id" class="input-file" ref="file" @change="onFileChange" />
-		<label :for="id"><font-awesome-icon icon="file-image" /></label>
-		<i style="color: #ccc">{{fileLabel || uploadLabel}}</i>
-		<button class="button-icon button-primary" @click="upload">
+		<v-file-input truncate-length="15" type="file" name="fileInput" :id="id" class="input-file" ref="file" @change="onFileChange" />
+		<v-btn icon @click="upload">
 			<font-awesome-icon icon="file-upload" />
-		</button>
-		<button class="button-icon button-primary" @click="preview">
+		</v-btn>
+		<v-btn icon @click="preview">
 			<font-awesome-icon icon="eye" />
-		</button>
+		</v-btn>
 
 		<PreviewModal v-if="showPreview" :assetUrl="assetUrl" @close="showPreview = false"></PreviewModal>
 	</div>
@@ -76,27 +74,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.input-file {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
 
-.input-file + label {
-    border: 1px solid #345915;
-	background-color: #c0e6a1;
-	color: #345915;
-    display: inline-block;
-	padding: 1px 5px;
-    cursor: pointer;
-}
-
-.input-file:focus + label,
-.input-file + label:hover {
-    background-color: #345915;
-	color: #fff;
-}
 </style>

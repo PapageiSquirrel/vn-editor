@@ -1,13 +1,14 @@
 import Dialog from './Dialog.js'
 import { Choice } from './Choice.js'
 import { Condition } from './Condition.js'
+import Trigger from './Trigger.js'
 
 export default class TreeNode {
 	constructor(index, title, description, interactions, isDecisive) {
 		this.id = nodeId++;
 		this.index = index;
 		this.children = [];
-		Object.assign(this, genericAttributesMixin, interactionMixin);
+		Object.assign(this, genericAttributesMixin, interactionMixin, triggerMixin);
 
 		this.initGenericData(title, description);
 		this.initInteractionData(interactions, isDecisive);
@@ -25,10 +26,11 @@ export default class TreeNode {
 		});
 		let node = new TreeNode(index);
 		node.setAttribute("title", "Choice");
-		node.setAsDecisive();
+		node.setAsChoice();
 		options.forEach((o,i) => {
 			let childNode = new TreeNode(i);
-			childNode.setAttribute("title", o);
+			childNode.setAsOption(o);
+			childNode.setAttribute("title", o.title);
 			node.children.push(childNode);
 		});
 		this.children.splice(index, 0, node);
@@ -85,7 +87,11 @@ const INTERACTION_TYPE = {
 let interactionMixin = {
 	interactions: [],
 	conditions: [],
+	isChoice: false,
 	isDecisive: false,
+	isOption: false,
+	traitValue: null,
+	traitChange: null,
 
 	initInteractionData(interactions, isDecisive) {
 		if (interactions) {
@@ -124,7 +130,7 @@ let interactionMixin = {
 		this.interactions.splice(index, 1);
 	},
 
-	addChoice(index, options, sectionIndex, isDecisive) {
+	addChoice(index, options, sectionIndex, isDecisive) {           
 		this.interactions.splice(index, 0, {type: INTERACTION_TYPE.CHOICE, value: new Choice(options, sectionIndex, isDecisive)});
 	},
 
@@ -132,7 +138,30 @@ let interactionMixin = {
 		this.conditions.push(new Condition(trait, operator, value));
 	},
 
-	setAsDecisive() {
+	setAsChoice() {
+		this.isChoice = true;
 		this.isDecisive = true;
+	},
+
+	setAsOption(option) {
+		this.isOption = true;
+		this.traitValue = option.traitValue;
+		this.traitChange = option.traitChange;
 	}
 };
+
+let triggerMixin = {
+	triggers: [],
+
+	initTriggerData(triggers) {
+		triggers.map(t => new Trigger(name));
+	},
+
+	addTrigger(name) {
+		this.triggers.push(new Trigger(name));
+	},
+
+	removeTrigger(index) {
+		this.triggers.splice(index, 1);
+	}
+}

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h4>{{node.title && node.title + "'s' END" || "Title's END"}}</h4>
+		
 	</div>
 </template>
 

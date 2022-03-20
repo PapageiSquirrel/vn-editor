@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<button :disabled="!canGoUp" class="button button-icon" @click="up"><font-awesome-icon icon="angle-up" /></button>
-		<button :disabled="!canGoDown" class="button button-icon" @click="down"><font-awesome-icon icon="angle-down" /></button>
+		<v-btn icon :disabled="!canGoUp" @click="up"><font-awesome-icon icon="angle-up" /></v-btn>
+		<v-btn icon :disabled="!canGoDown" @click="down"><font-awesome-icon icon="angle-down" /></v-btn>
 	</div>
 </template>
 
@@ -32,12 +32,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-button {
-	opacity: 0.5;
-	background-color: gray;
-	border: solid gray 1px;
-	border-radius: 5px;
-}
 button:hover {
 	background-color: darkgrey;
 	color: white;

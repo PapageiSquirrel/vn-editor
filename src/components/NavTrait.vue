@@ -1,17 +1,24 @@
 <template>
-	<div style="display: flex;">
-		<div style="width: 90%; display: flex; flex-wrap: wrap;">
-			<div v-for="trait in traits" :key="trait.id" class="card-bordered" style="width: 30%">
-				<TitleInput :title="trait.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="trait.name = $event"></TitleInput>
-				<ListInput :elements="trait.steps" :elType="'step'" :elKey="'name'">
-					<template v-slot:default="slotProps">
-						<input type="number" v-model="slotProps.element.value" style="margin-left: 5%; margin-right: 5%;" />
-					</template>
-				</ListInput>
-			</div>
-		</div>
-		<ToolboxItem :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="save" @toolUpload="upload"></ToolboxItem>
-	</div>
+	<v-container>
+		<v-row>
+			<template v-for="(trait, index) in traits">
+				<v-col :key="trait.id">
+					<v-card class="pa-2" outlined tile>
+						<TitleInput :title="trait.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="trait.name = $event"></TitleInput>
+						<ListInput :elements="trait.steps" :elType="'step'" :elKey="'name'">
+							<template v-slot:default="slotProps">
+								<input type="number" v-model="slotProps.element.value" style="margin-left: 5%; margin-right: 5%;" />
+							</template>
+						</ListInput>
+					</v-card>
+				</v-col>
+
+				<v-responsive v-if="index % 2 === 1" :key="`width-${index}`" width="100%"></v-responsive>
+			</template>
+		</v-row>	
+		
+		<Toolbox :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="save" @toolUpload="upload"></Toolbox>
+	</v-container>
 </template>
 
 <script>
@@ -19,7 +26,7 @@ import NavData from '../mixins/NavData.js'
 
 import TitleInput from './generic/TitleInput.vue'
 import ListInput from './generic/ListInput.vue'
-import ToolboxItem from './generic/ToolboxItem.vue'
+import Toolbox from './generic/Toolbox.vue'
 
 export default {
 	name: 'NavTrait',
@@ -29,7 +36,7 @@ export default {
 	components: {
 		TitleInput,
 		ListInput,
-		ToolboxItem
+		Toolbox
 	},
 	data() {
 		return {

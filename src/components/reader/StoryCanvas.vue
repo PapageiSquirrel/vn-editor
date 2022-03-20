@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<v-main>
 		<CharScroller class="body"></CharScroller>
 
 		<footer>
 			<DialogReader :storyId="1"></DialogReader>
 		</footer>
-	</div>
+	</v-main>
 </template>
 
 <script>
@@ -22,18 +22,5 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.body {
-	position:fixed;
-	height: 600px;
-	width: 99%;
-}
 
-footer {
-  position: fixed;
-  bottom: 0;
-  background-color: var(--primary-color);
-  width: 99%;
-  border-top: solid 2px black;
-  padding-top: 4px;
-}
 </style>
