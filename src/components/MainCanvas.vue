@@ -6,7 +6,6 @@
 					<font-awesome-icon icon="tv" />
 				</v-list-item-icon>
 				<v-list-item-content>Edit Mode</v-list-item-content>
-				<v-spacer></v-spacer>
 				<v-btn icon @click.stop="mini = !mini">
 					<v-icon>mdi-chevron-left</v-icon>
 				</v-btn>

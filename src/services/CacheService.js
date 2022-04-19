@@ -9,7 +9,12 @@ class CacheService {
 	}
 
 	getCache(type, key) {
-		return parseInt(this.adapters[type].getItem(key), 10) || DEFAULT_CACHE[key];
+		try {
+			return JSON.parse(this.adapters[type].getItem(key));
+		} catch(e) {
+			return DEFAULT_CACHE[key];
+		}
+		
 	}
 
 	getCacheKeyByCollection(collection) {
@@ -53,6 +58,7 @@ const CACHE_TYPE = {
 
 const CACHE_KEY = {
 	HISTORY_IDENTIFIER: "historyId",
+	STORY: "story",
 	STORY_CHARACTERS: "storyCharacters",
 	STORY_TRAITS: "storyTraits",
 	STORY_TRIGGERS: "storyTriggers",

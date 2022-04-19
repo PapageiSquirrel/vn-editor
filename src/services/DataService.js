@@ -9,7 +9,6 @@ import Trigger from '../models/Trigger.js'
 import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService.js'
 
 const API_URL = "http://localhost:45050/api/";
-const cacheServiceInstance = cacheService;
 
 class DataService {
 	constructor() {
@@ -29,8 +28,8 @@ class DataService {
 	
 	get(collection, params, keepCache) {
 		if (keepCache) {
-			let cacheKey = cacheServiceInstance.getCacheKeyByCollection(collection);
-			let cache = cacheServiceInstance.getCache(CACHE_TYPE.APP, cacheKey);
+			let cacheKey = cacheService.getCacheKeyByCollection(collection);
+			let cache = cacheService.getCache(CACHE_TYPE.APP, cacheKey);
 			if (cache) {
 				return Promise.resolve(cache);
 			}
@@ -50,8 +49,8 @@ class DataService {
 			})
 			.finally(data => {
 				if (keepCache) {
-					let cacheKey = cacheServiceInstance.getCacheKeyByCollection(collection);
-					cacheServiceInstance.addToCache(CACHE_TYPE.APP, cacheKey, data)
+					let cacheKey = cacheService.getCacheKeyByCollection(collection);
+					cacheService.addToCache(CACHE_TYPE.APP, cacheKey, data)
 				}
 			});
 
@@ -61,8 +60,8 @@ class DataService {
 
 	set(collection, operation, data, clearCache) {
 		if (clearCache) {
-			let cacheKey = cacheServiceInstance.getCacheKeyByCollection(collection);
-			cacheServiceInstance.removeFromCache(CACHE_TYPE.APP, cacheKey);
+			let cacheKey = cacheService.getCacheKeyByCollection(collection);
+			cacheService.removeFromCache(CACHE_TYPE.APP, cacheKey);
 		}
 
 		if (this.pendingCalls[collection]) {
@@ -109,11 +108,11 @@ const PARAMETER = {
 
 const treeAdapter = {
 	addIdentifier(data) {
-		data.id |= cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		data.id |= cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 		return data;
 	},
 	getIdentifier(data) {
-		return data && data.id || cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return data && data.id || cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		if (Array.isArray(result)) {
@@ -139,7 +138,7 @@ const characterAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Character(c.name, c.description, c.color, c.moods)) : [];
@@ -183,7 +182,7 @@ const traitAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Trait(c.name, c.steps)) : [];
@@ -208,7 +207,7 @@ const triggerAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Trigger(c.name)) : [];

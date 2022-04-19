@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elList="triggersPlusAnother">
+		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elList="triggersPlusAnother" style="margin-top: 5%;">
 			<template v-slot:default="slotProps">
 				<v-text-field type="text" v-if="slotProps.element.name === 'New Trigger'" v-model="newTrigger" style="margin-left: 5%; margin-right: 5%;" />
 				<v-btn v-if="slotProps.element.name === 'New Trigger'" fab color="primary" @click="saveTrigger"><font-awesome-icon icon="save" /></v-btn>
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { cacheService, CACHE_TYPE, CACHE_KEY } from '../../services/CacheService.js'
 import { OPERATOR } from '../../models/Condition.js'
 
 import NodeHead from './NodeHead.vue'
@@ -84,9 +85,7 @@ export default {
 		branchLength: Number,
 		nodeSelected: Object,
 		displayChildren: Boolean,
-		depth: Number,
-		traits: Array,
-		triggers: Array
+		depth: Number
 	},
 	data() {
 		return {
@@ -94,7 +93,9 @@ export default {
 			leftStepMargin: 50,
 			colorRatio: 32,
 			operators: operators,
-			newTrigger: ""
+			newTrigger: "",
+			traits: [],
+			triggers: []
 		}
 	},
 	computed: {
@@ -111,10 +112,6 @@ export default {
 			return 'rgb(' + color + ',' + color + ',' + color + ')';
 		},
 		triggersPlusAnother() {
-			if (!this.triggers) {
-				return;
-			}
-			console.log(this.triggers); // eslint-disable-line no-console
 			return [...this.triggers, "New Trigger"];
 		},
 		isNodeSelected() {
@@ -148,6 +145,13 @@ export default {
 		onReorder(index) {
 			this.$emit("onReorder", {previous: this.nodeIndex, next: index});
 		}
+	},
+	created() {
+		let storyTraits = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS);
+		this.traits = storyTraits && JSON.parse(storyTraits) || [];
+
+		let storyTriggers = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS);
+		this.triggers = storyTriggers && JSON.parse(storyTriggers) || [];
 	}
 }
 </script>

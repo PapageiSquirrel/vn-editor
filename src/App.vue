@@ -21,7 +21,6 @@
 <script>
 // VUES
 import MainCanvas from './components/MainCanvas.vue'
-
 import StoryCanvas from './components/reader/StoryCanvas.vue'
 
 export default {

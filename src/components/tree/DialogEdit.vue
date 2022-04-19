@@ -35,7 +35,7 @@ export default {
 			return this.loadedData || [];
 		},
 		moods() {
-			let character = this.character && this.characters.find(c => c.name === this.character);
+			let character = this.characters && this.characters.find(c => c.name === this.character);
 			return character && character.moods || [];
 		}
 	},

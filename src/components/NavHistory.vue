@@ -21,7 +21,7 @@
 										<v-card-title>Characters</v-card-title>
 
 										<v-card-text>
-											<v-card v-for="c in characters && characters[hist.id]" :key="c.id">{{c.name}}</v-card>
+											<v-card v-for="c in storyCharacters(hist.id)" :key="c.id">{{c.name}}</v-card>
 										</v-card-text>
 									</v-card>
 								</v-col>
@@ -31,7 +31,7 @@
 										<v-card-title>Traits</v-card-title>
 
 										<v-card-text>
-											<v-card v-for="t in traits && traits[hist.id]" :key="t.id">{{t.name}}</v-card>
+											<v-card v-for="t in storyTraits(hist.id)" :key="t.id">{{t.name}}</v-card>
 										</v-card-text>
 									</v-card>
 								</v-col>
@@ -81,7 +81,7 @@ export default {
 	data() {
 		return {
 			collection: "histories",
-			collections: ["characters", "traits"],
+			collections: ["characters", "traits", "triggers"],
 			selectedHistory: null,
 			params: PARAMETER.ALL
 		}
@@ -95,18 +95,43 @@ export default {
 		},
 		traits() {
 			return this.loadedDatas && this.loadedDatas[1];
+		},
+		triggers() {
+			return this.loadedDatas && this.loadedDatas[2]
 		}
 	},
 	methods: {
+		storyCharacters(storyId) {
+			return this.characters && this.characters[storyId];
+		},
+		storyTraits(storyId) {
+			return this.traits && this.traits[storyId];
+		},
+		storyTriggers(storyId) {
+			return this.triggers && this.triggers[storyId];
+		},
 		select(value) {
 			this.selectedHistory = value;
-			cacheService.clearCache(CACHE_TYPE.APP);
-			cacheService.addToMultipleCache([CACHE_TYPE.APP, CACHE_TYPE.SESSION], CACHE_KEY.HISTORY_IDENTIFIER, parseInt(this.selectedHistory.id, 10));
+			try {
+				cacheService.clearCache(CACHE_TYPE.APP);
+				cacheService.addToMultipleCache([CACHE_TYPE.APP, CACHE_TYPE.SESSION], CACHE_KEY.HISTORY_IDENTIFIER, parseInt(this.selectedHistory.id, 10));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY, JSON.stringify(this.selectedHistory));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_CHARACTERS, JSON.stringify(this.storyCharacters(this.selectedHistory)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS, JSON.stringify(this.storyTraits(this.selectedHistory)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS, JSON.stringify(this.storyTriggers(this.selectedHistory)));
+			} catch(e) {
+				console.log(e); // eslint-disable-line no-console
+			}
 			this.$emit("storyChange", this.selectedHistory);
 		},
 		isSelectedStory(hist) {
 			return this.selectedHistory && this.selectedHistory.id === hist.id;
 		}
+	},
+	created() {
+		let cacheStory = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY);
+		this.selectedHistory = cacheStory;
+		this.$emit("storyChange", this.selectedHistory);
 	}
 }
 </script>
