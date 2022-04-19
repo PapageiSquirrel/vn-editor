@@ -16,7 +16,6 @@ export default {
 	},
 	methods: {
 		updateDatas(results) {
-			//vm.$set(vm.items, indexOfItem, newValue)
 			this.loadedDatas = results;
 			this.loadComplete = true;
 		} 

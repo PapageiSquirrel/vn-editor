@@ -21,7 +21,7 @@
 										<v-card-title>Characters</v-card-title>
 
 										<v-card-text>
-											<v-card v-for="c in characters" :key="c.id">{{c.name}}</v-card>
+											<v-card v-for="c in characters && characters[hist.id]" :key="c.id">{{c.name}}</v-card>
 										</v-card-text>
 									</v-card>
 								</v-col>
@@ -31,7 +31,7 @@
 										<v-card-title>Traits</v-card-title>
 
 										<v-card-text>
-											<v-card v-for="t in traits" :key="t.id">{{t.name}}</v-card>
+											<v-card v-for="t in traits && traits[hist.id]" :key="t.id">{{t.name}}</v-card>
 										</v-card-text>
 									</v-card>
 								</v-col>
@@ -60,6 +60,7 @@
 
 <script>
 import { cacheService, CACHE_TYPE, CACHE_KEY } from '../services/CacheService.js'
+import { PARAMETER } from '../services/DataService.js'
 
 import NavData from '../mixins/NavData.js'
 import DataLoader from '../mixins/DataLoader.js'
@@ -81,7 +82,8 @@ export default {
 		return {
 			collection: "histories",
 			collections: ["characters", "traits"],
-			selectedHistory: null
+			selectedHistory: null,
+			params: PARAMETER.ALL
 		}
 	},
 	computed: {

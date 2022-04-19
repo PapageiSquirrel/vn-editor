@@ -20,6 +20,9 @@ class CacheService {
 				return CACHE_KEY.STORY_CHARACTERS;
 			case COLLECTION.TRAITS:
 				return CACHE_KEY.STORY_TRAITS;
+			case COLLECTION.TRIGGERS:
+				return CACHE_KEY.STORY_TRIGGERS;
+
 		}
 	}
 
@@ -52,6 +55,7 @@ const CACHE_KEY = {
 	HISTORY_IDENTIFIER: "historyId",
 	STORY_CHARACTERS: "storyCharacters",
 	STORY_TRAITS: "storyTraits",
+	STORY_TRIGGERS: "storyTriggers",
 	INTERACTION_EDIT: "interactionEdit"
 };
 

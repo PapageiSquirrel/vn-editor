@@ -25,7 +25,8 @@ export default {
 		elements: Array,
 		elType: String,
 		elKey: String,
-		elList: Array
+		elList: Array,
+		
 	},
 	data: function() {
 		return {

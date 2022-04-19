@@ -48,10 +48,10 @@
 			</div>
 		</div>
 
-		<ListSelectInput :elements="node.triggers" :elType="'condition'" :elKey="'trait'" :elList="traits">
+		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elList="triggersPlusAnother">
 			<template v-slot:default="slotProps">
-				<v-select v-model="slotProps.element.operator" :items="operators" style="margin-left: 5%; margin-right: 5%;" />
-				<v-text-field type="number" v-model="slotProps.element.value" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
+				<v-text-field type="text" v-if="slotProps.element.name === 'New Trigger'" v-model="newTrigger" style="margin-left: 5%; margin-right: 5%;" />
+				<v-btn v-if="slotProps.element.name === 'New Trigger'" fab color="primary" @click="saveTrigger"><font-awesome-icon icon="save" /></v-btn>
 			</template>
 		</ListSelectInput>
 
@@ -60,8 +60,6 @@
 </template>
 
 <script>
-import { dataService, COLLECTION } from '../../services/DataService.js'
-
 import { OPERATOR } from '../../models/Condition.js'
 
 import NodeHead from './NodeHead.vue'
@@ -86,22 +84,24 @@ export default {
 		branchLength: Number,
 		nodeSelected: Object,
 		displayChildren: Boolean,
-		depth: Number
+		depth: Number,
+		traits: Array,
+		triggers: Array
 	},
-	data: function() {
+	data() {
 		return {
 			isOpen: false,
 			leftStepMargin: 50,
 			colorRatio: 32,
 			operators: operators,
-			traits: []
+			newTrigger: ""
 		}
 	},
 	computed: {
-		nextDepth: function() {
+		nextDepth() {
 			return this.depth+1;
 		},
-		backgroundColor: function() {
+		backgroundColor() {
 			if (this.node.isDecisive) {
 				return 'rgb(200, 60, 80)';
 			}
@@ -110,18 +110,25 @@ export default {
 			let color = (this.depth * this.colorRatio).toString();
 			return 'rgb(' + color + ',' + color + ',' + color + ')';
 		},
-		isNodeSelected: function() {
+		triggersPlusAnother() {
+			if (!this.triggers) {
+				return;
+			}
+			console.log(this.triggers); // eslint-disable-line no-console
+			return [...this.triggers, "New Trigger"];
+		},
+		isNodeSelected() {
 			return this.nodeSelected && this.node.id === this.nodeSelected.id;
 		}
 	},
 	methods: {
-		toggleSubNodes: function() {
+		toggleSubNodes() {
 			this.isOpen = true;
 		},
-		untoggleSubNodes: function() {
+		untoggleSubNodes() {
 			this.isOpen = false;
 		},
-		selectNode: function(indexes) {
+		selectNode(indexes) {
 			indexes.splice(0, 0, this.node.index);
 			this.$emit("onNodeSelection", indexes);
 		},
@@ -131,18 +138,16 @@ export default {
 		deleteNode() {
 
 		},
+		saveTrigger() {
+			// TODO : add a new trigger to the collection
+			this.newTrigger = "";
+		},
 		reorderChildren(event) {
 			this.node.children.splice(event.next, 0, this.node.children.splice(event.previous, 1)[0]);
 		},
 		onReorder(index) {
 			this.$emit("onReorder", {previous: this.nodeIndex, next: index});
 		}
-	},
-	created() {
-		dataService.get(COLLECTION.TRAITS, null, true)
-			.then(result => {
-				this.traits = result.map(t => t.name);
-			});
 	}
 }
 </script>

@@ -1,8 +1,15 @@
 <template>
 	<v-main>
-		<v-navigation-drawer absolute>
+		<v-navigation-drawer v-model="drawer" permanent absolute :mini-variant.sync="mini">
 			<v-list-item>
-				Edit Mode
+				<v-list-item-icon>
+					<font-awesome-icon icon="tv" />
+				</v-list-item-icon>
+				<v-list-item-content>Edit Mode</v-list-item-content>
+				<v-spacer></v-spacer>
+				<v-btn icon @click.stop="mini = !mini">
+					<v-icon>mdi-chevron-left</v-icon>
+				</v-btn>
 			</v-list-item>
 			<v-divider></v-divider>
 			<v-list-item v-for="view in views"
@@ -10,7 +17,10 @@
 				:class="{ navActive: currentView === view.component }"
 				:disabled="!storyOverview"
 				@click="selectView(view)">
-				<span v-show="currentView !== view.component">{{view.label}}</span>
+				<v-list-item-icon>
+					<font-awesome-icon :icon="view.icon" />
+				</v-list-item-icon>
+				<v-list-item-content v-show="currentView !== view.component">{{view.label}}</v-list-item-content>
 
 				<v-list v-show="currentView === view.component">
 					<v-list-item-title>{{view.label}}</v-list-item-title>
@@ -46,18 +56,20 @@ export default {
 		return {
 			currentView: 'NavHistory',
 			views: [
-				{label: "Stories", component: 'NavHistory', subs: []}, 
-				{label: "Dialog Tree", component: 'NavTree', subs: [
+				{label: "Stories", component: 'NavHistory', icon: "scroll", subs: []}, 
+				{label: "Dialog Tree", component: 'NavTree', icon: "code-branch", subs: [
 					{id:'sub21', option:'showTree', label:'Tree'}, 
 					{id:"sub22", option:"showDialogs", label:"Dialogs"},
 					{id:"sub23", option:"showTriggers", label:"Triggers"},
 					{id:"sub24", option:"showExplorations", label:"Explorations"}
 				]}, 
-				{label: "Characters", component: 'NavCharacter', subs: []}, 
-				{label: "Traits", component: 'NavTrait', subs: []}
+				{label: "Characters", component: 'NavCharacter', icon: "user-plus", subs: []}, 
+				{label: "Traits", component: 'NavTrait', icon: "brain", subs: []}
 			],
 			viewOptions: {},
-			storyOverview: null
+			storyOverview: null,
+			drawer: true,
+			mini: false
 		}
 	},
 	computed: {

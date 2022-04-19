@@ -4,7 +4,7 @@ import { Condition } from './Condition.js'
 import Trigger from './Trigger.js'
 
 export default class TreeNode {
-	constructor(index, title, description, interactions, isDecisive) {
+	constructor(index, title, description, interactions, isDecisive, triggers) {
 		this.id = nodeId++;
 		this.index = index;
 		this.children = [];
@@ -12,6 +12,7 @@ export default class TreeNode {
 
 		this.initGenericData(title, description);
 		this.initInteractionData(interactions, isDecisive);
+		this.initTriggerData(triggers);
 	}
 
 	addChild() {
@@ -154,7 +155,10 @@ let triggerMixin = {
 	triggers: [],
 
 	initTriggerData(triggers) {
-		triggers.map(t => new Trigger(name));
+		if (!triggers) {
+			return;
+		}
+		triggers.map(t => new Trigger(t.name));
 	},
 
 	addTrigger(name) {
@@ -164,4 +168,4 @@ let triggerMixin = {
 	removeTrigger(index) {
 		this.triggers.splice(index, 1);
 	}
-}
+};

@@ -4,6 +4,7 @@ import Tree from '../models/Tree.js'
 import Character from '../models/Character.js'
 import History from '../models/History.js'
 import Trait from '../models/Trait.js'
+import Trigger from '../models/Trigger.js'
 
 import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService.js'
 
@@ -17,7 +18,8 @@ class DataService {
 			trees: treeAdapter,
 			characters: characterAdapter,
 			histories: historyAdapter,
-			traits: traitAdapter
+			traits: traitAdapter,
+			triggers: triggerAdapter
 		}
 	}
 
@@ -38,10 +40,13 @@ class DataService {
 			return this.pendingCalls[collection];
 		}
 
-		let id = this.adapters[collection].getIdentifier(params);
+		let id = params === PARAMETER.ALL ? null : this.adapters[collection].getIdentifier(params);
 		let promise = axios.get(API_URL + collection + (id ? '?id=' + id : ""))
 			.then(result => {
-				return result.status === 200 ? this.adapters[collection].convert(result.data) : [];
+				if (result.status !== 200) {
+					return [];
+				}
+				return params !== PARAMETER.ALL ? this.adapters[collection].convert(result.data) : this.adapters[collection].convertAll(result.data);
 			})
 			.finally(data => {
 				if (keepCache) {
@@ -87,7 +92,8 @@ const COLLECTION = {
 	TREES: "trees",
 	CHARACTERS: "characters",
 	HISTORIES: "histories",
-	TRAITS: "traits"
+	TRAITS: "traits",
+	TRIGGERS: "triggers"
 };
 
 const OPERATION = {
@@ -95,6 +101,10 @@ const OPERATION = {
 	UPDATE: "update",
 	SAVE: "save",
 	DELETE: "delete"
+};
+
+const PARAMETER = {
+	ALL: "all"
 };
 
 const treeAdapter = {
@@ -110,6 +120,10 @@ const treeAdapter = {
 			return result.map(r => new Tree(r.id, r.trunk, r.name));
 		}
 		return result && new Tree(result.id, result.trunk, result.name);
+	},
+	convertAll() {
+		// TODO: implementation for trees is not yet necessary
+		return [];
 	},
 	create() {
 		return new Tree();
@@ -130,6 +144,12 @@ const characterAdapter = {
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Character(c.name, c.description, c.color, c.moods)) : [];
 	},
+	convertAll(result) {
+		return result && result.reduce((res,l) => { 
+			res[l.id] = l.data.map(c => new Character(c.name, c.description, c.color, c.moods));
+			return res;
+		}, {});
+	},
 	create() {
 		return new Character("New Character", "description of the character");
 	}
@@ -144,6 +164,10 @@ const historyAdapter = {
 	},
 	convert(result) {
 		return result ? result.map(h => new History(h.id, h.name, h.description)) : [];
+	},
+	convertAll() {
+		// TODO: implementation for stories is not yet necessary
+		return [];
 	},
 	create() {
 		return new History(null, "New Story", "Description of the story");
@@ -164,10 +188,39 @@ const traitAdapter = {
 	convert(result) {
 		return result && result.data ? result.data.map(c => new Trait(c.name, c.steps)) : [];
 	},
+	convertAll(result) {
+		return result && result.reduce((res,l) => { 
+			res[l.id] = l.data.map(r => new Trait(r.name, r.steps));
+			return res;
+		}, {});
+	},
 	create() {
 		return new Trait("New Trait");
 	}
 };
 
+const triggerAdapter = {
+	addIdentifier(data) {
+		let id = this.getIdentifier();
+		return {
+			id: id,
+			data: data
+		};
+	},
+	getIdentifier() {
+		return cacheServiceInstance.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
+	},
+	convert(result) {
+		return result && result.data ? result.data.map(c => new Trigger(c.name)) : [];
+	},
+	convertAll() {
+		// TODO: implementation for triggers is not yet necessary
+		return [];
+	},
+	create() {
+		return new Trigger("Trigger name");
+	}
+};
+
 const dataService = new DataService();
-export { dataService, COLLECTION, OPERATION };
+export { dataService, COLLECTION, OPERATION, PARAMETER };
