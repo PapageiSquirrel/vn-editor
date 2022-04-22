@@ -1,1 +1,63 @@
-[{"id":1,"data":[{"id":62,"name":"Main 1","description":"description of the character","color":"#cc8800","moods":[{"type":"Normal"},{"type":"Anxious"},{"type":"Tired"}]},{"id":63,"name":"Main 2","description":"description of the character","color":"#cc8800","moods":[]},{"id":64,"name":"Secondary 1","description":"description of the character","color":"#cc8800","moods":[]},{"id":65,"name":"New Character","description":"description of the character","color":"#cc8800","moods":[]},{"id":66,"name":"New Character","description":"description of the character","color":"#cc8800","moods":[]}]},{"id":"2","data":[{"id":0,"name":"New Character","description":"description of the character","moods":[]},{"id":1,"name":"New Character","description":"description of the character","moods":[]},{"id":2,"name":"New Character","description":"description of the character","moods":[]}]},{"id":"3","data":[{"id":3,"name":"New Character","description":"description of the character","moods":[]},{"id":4,"name":"New Character","description":"description of the character","moods":[]},{"id":5,"name":"New Character","description":"description of the character","moods":[]}]},{"id":"1","data":[{"id":3,"name":"New Character","description":"description of the character","moods":[]},{"id":4,"name":"New Character","description":"description of the character","moods":[]},{"id":5,"name":"New Character","description":"description of the character","moods":[]}]},{"id":3,"data":[]}]
+[
+    {
+        "id": 1,
+        "data":
+        [
+            {
+                "id": 62,
+                "name": "Main 1",
+                "description": "description of the character",
+                "color": "#cc8800",
+                "moods":
+                [
+                    {
+                        "type": "Normal"
+                    },
+                    {
+                        "type": "Anxious"
+                    },
+                    {
+                        "type": "Tired"
+                    }
+                ]
+            },
+            {
+                "id": 63,
+                "name": "Main 2",
+                "description": "description of the character",
+                "color": "#cc8800",
+                "moods":
+                []
+            },
+            {
+                "id": 64,
+                "name": "Secondary 1",
+                "description": "description of the character",
+                "color": "#cc8800",
+                "moods":
+                []
+            },
+            {
+                "id": 65,
+                "name": "New Character",
+                "description": "description of the character",
+                "color": "#cc8800",
+                "moods":
+                []
+            },
+            {
+                "id": 66,
+                "name": "New Character",
+                "description": "description of the character",
+                "color": "#cc8800",
+                "moods":
+                []
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "data":
+        []
+    }
+]
