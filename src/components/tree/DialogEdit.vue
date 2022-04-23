@@ -1,7 +1,7 @@
 <template>
 	<div style="display:flex;">
 		<v-select v-model="character" :items="characters" item-text="name" item-value="name" label="Character" />
-		<v-select v-model="mood" :items="moods" item-text="type" item-value="type" label="Mood" />
+		<v-select v-model="mood" :items="moods" :disabled="!character" item-text="type" item-value="type" label="Mood" />
 		<v-text-field v-model="text" label="Text" />
 		<v-btn fab color="primary" @click="save"><font-awesome-icon icon="save" /></v-btn>
 	</div>
@@ -24,6 +24,8 @@ export default {
 	data() {
 		return {
 			collection: "characters",
+			keepCache: true,
+			clearCache: false,
 			isEditing: false,
 			character: "",
 			mood: "",

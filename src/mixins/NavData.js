@@ -1,13 +1,11 @@
 import { dataService, OPERATION } from '../services/DataService.js'
 
 export default {
-	props: {
-		keepCache: Boolean,
-		clearCache: Boolean
-	},
 	data() {
 		return {
 			collection: "",
+			clearCache: false,
+			keepCache: false,
 			loadComplete: false,
 			loadedData: null,
 			modificationHistory: [],

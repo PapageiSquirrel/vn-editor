@@ -51,7 +51,9 @@ export default {
 	},
 	data() {
 		return {
-			collection: "characters"
+			collection: "characters",
+			keepCache: true,
+			clearCache: true
 		}
 	},
 	computed: {

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { dataService, COLLECTION, PARAMETER } from '../services/DataService.js'
+import { dataService, COLLECTION } from '../services/DataService.js'
 
 import NavData from '../mixins/NavData.js'
 
@@ -78,7 +78,7 @@ export default {
 				this.traits = result.map(t => t.name);
 			});
 
-		dataService.get(COLLECTION.TRIGGERS, PARAMETER.ALL, true)
+		dataService.get(COLLECTION.TRIGGERS, null, true)
 			.then(result => {
 				this.triggers = result.map(t => t.name);
 			});

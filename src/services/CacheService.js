@@ -40,7 +40,7 @@ class CacheService {
 	}
 
 	removeFromCache(type, key) {
-		this.adapters[type].remove(key);
+		this.adapters[type].removeItem(key);
 	}
 
 	clearCache(type) {
@@ -78,7 +78,7 @@ let appCacheAdapter = {
 	setItem(key, value) {
 		this.__cache[key] = value;
 	},
-	remove(key) {
+	removeItem(key) {
 		delete this.__cache[key];
 	},
 	clear() {

@@ -7,7 +7,7 @@
 						<TitleInput :title="trait.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="trait.name = $event"></TitleInput>
 						<ListInput :elements="trait.steps" :elType="'step'" :elKey="'name'">
 							<template v-slot:default="slotProps">
-								<input type="number" v-model="slotProps.element.value" style="margin-left: 5%; margin-right: 5%;" />
+								<v-text-field type="number" v-model="slotProps.element.value" style="margin-left: 5%; margin-right: 5%;" />
 							</template>
 						</ListInput>
 					</v-card>
@@ -40,7 +40,9 @@ export default {
 	},
 	data() {
 		return {
-			collection: "traits"
+			collection: "traits",
+			keepCache: true,
+			clearCache: true
 		}
 	},
 	computed: {

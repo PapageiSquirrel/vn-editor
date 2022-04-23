@@ -116,9 +116,9 @@ export default {
 				cacheService.clearCache(CACHE_TYPE.APP);
 				cacheService.addToMultipleCache([CACHE_TYPE.APP, CACHE_TYPE.SESSION], CACHE_KEY.HISTORY_IDENTIFIER, parseInt(this.selectedHistory.id, 10));
 				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY, JSON.stringify(this.selectedHistory));
-				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_CHARACTERS, JSON.stringify(this.storyCharacters(this.selectedHistory)));
-				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS, JSON.stringify(this.storyTraits(this.selectedHistory)));
-				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS, JSON.stringify(this.storyTriggers(this.selectedHistory)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_CHARACTERS, JSON.stringify(this.storyCharacters(this.selectedHistory.id)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS, JSON.stringify(this.storyTraits(this.selectedHistory.id)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS, JSON.stringify(this.storyTriggers(this.selectedHistory.id)));
 			} catch(e) {
 				console.log(e); // eslint-disable-line no-console
 			}
@@ -130,7 +130,7 @@ export default {
 	},
 	created() {
 		let cacheStory = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY);
-		this.selectedHistory = cacheStory;
+		this.select(cacheStory);
 		this.$emit("storyChange", this.selectedHistory);
 	}
 }

@@ -11,7 +11,7 @@
 		<div v-show="editMode">
 			<div v-show="options.length > 0" v-for="option in options" :key="option.id" class="optionContainer">
 				<v-text-field type="text" v-model="option.title" placeholder="Option label" />
-				<v-select v-model="option.traitChange" :items="traits" style="margin-left: 5%; margin-right: 5%;" placeholder="Trait to change" />
+				<v-select v-model="option.traitChange" :items="traits.map(t => t.name)" style="margin-left: 5%; margin-right: 5%;" placeholder="Trait to change" />
 				<v-text-field type="number" v-model="option.traitValue" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
 			</div>
 			
@@ -50,6 +50,8 @@ export default {
 	data() {
 		return {
 			collection: "traits",
+			keepCache: true,
+			clearCache: false,
 			editMode: false,
 			isDecisive: false,
 			options: []

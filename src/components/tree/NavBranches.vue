@@ -14,10 +14,9 @@
 				@onNodeDeletion="deleteNode"></NodeHead>
 		</div>
 
-		<ListSelectInput :elements="node.conditions" :elType="'condition'" :elKey="'trait'" :elList="traits">
+		<ListSelectInput :elements="node.conditions" :elType="'condition'" :elKey="'trait'" :elList="traits.map(t => t.name)">
 			<template v-slot:default="slotProps">
-				<v-select v-model="slotProps.element.operator" :items="operators" style="margin-left: 5%; margin-right: 5%;" />
-				<v-text-field type="number" v-model="slotProps.element.value" hide-details single-line style="margin-left: 5%; margin-right: 5%;" />
+				<v-select v-model="slotProps.element.step" :items="getSteps(slotProps.element.trait)" style="margin-left: 5%; margin-right: 5%;" />
 			</template>
 		</ListSelectInput>
 
@@ -61,15 +60,12 @@
 
 <script>
 import { cacheService, CACHE_TYPE, CACHE_KEY } from '../../services/CacheService.js'
-import { OPERATOR } from '../../models/Condition.js'
 
 import NodeHead from './NodeHead.vue'
 import NodeFoot from './NodeFoot.vue'
 
 import ReorderingButtons from '../generic/ReorderingButtons.vue'
 import ListSelectInput from '../generic/ListSelectInput.vue'
-
-const operators = Object.values(OPERATOR);
 
 export default {
 	name: 'NavBranches',
@@ -92,7 +88,6 @@ export default {
 			isOpen: false,
 			leftStepMargin: 50,
 			colorRatio: 32,
-			operators: operators,
 			newTrigger: "",
 			traits: [],
 			triggers: []
@@ -119,6 +114,14 @@ export default {
 		}
 	},
 	methods: {
+		getSteps(traitSelected) {
+			let trait = this.traits.find(t => t.name === traitSelected);
+			if (!trait) {
+				return [];
+			}
+
+			return trait.steps.map(s => s.name);
+		},
 		toggleSubNodes() {
 			this.isOpen = true;
 		},
@@ -148,10 +151,10 @@ export default {
 	},
 	created() {
 		let storyTraits = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS);
-		this.traits = storyTraits && JSON.parse(storyTraits) || [];
+		this.traits = storyTraits || [];
 
 		let storyTriggers = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS);
-		this.triggers = storyTriggers && JSON.parse(storyTriggers) || [];
+		this.triggers = (storyTriggers || []).map(t => t.name);
 	}
 }
 </script>

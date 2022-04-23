@@ -22,7 +22,7 @@ export default {
 	},
 	created() {
 		let promises = this.collections.map(col => {
-			return dataService.get(col, this.params, true);
+			return dataService.get(col, this.params, false);
 		});
 		
 		return Promise.all(promises)

@@ -29,7 +29,7 @@ class DataService {
 	get(collection, params, keepCache) {
 		if (keepCache) {
 			let cacheKey = cacheService.getCacheKeyByCollection(collection);
-			let cache = cacheService.getCache(CACHE_TYPE.APP, cacheKey);
+			let cache = cacheService.getCache(CACHE_TYPE.SESSION, cacheKey);
 			if (cache) {
 				return Promise.resolve(cache);
 			}
@@ -50,7 +50,7 @@ class DataService {
 			.finally(data => {
 				if (keepCache) {
 					let cacheKey = cacheService.getCacheKeyByCollection(collection);
-					cacheService.addToCache(CACHE_TYPE.APP, cacheKey, data)
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data)
 				}
 			});
 
@@ -61,7 +61,7 @@ class DataService {
 	set(collection, operation, data, clearCache) {
 		if (clearCache) {
 			let cacheKey = cacheService.getCacheKeyByCollection(collection);
-			cacheService.removeFromCache(CACHE_TYPE.APP, cacheKey);
+			cacheService.removeFromCache(CACHE_TYPE.SESSION, cacheKey);
 		}
 
 		if (this.pendingCalls[collection]) {
@@ -76,6 +76,12 @@ class DataService {
 					return true;
 				}
 				return false;
+			})
+			.finally(data => {
+				if (clearCache) {
+					let cacheKey = cacheService.getCacheKeyByCollection(collection);
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data)
+				}
 			});
 
 		this._queue(collection, promise);
