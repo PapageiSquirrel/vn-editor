@@ -111,6 +111,11 @@ export default {
 			return this.triggers && this.triggers[storyId];
 		},
 		select(value) {
+			let cacheStory = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY);
+			if (cacheStory && value && cacheStory.id === value.id) {
+				return;
+			}
+
 			this.selectedHistory = value;
 			try {
 				cacheService.clearCache(CACHE_TYPE.APP);
@@ -131,7 +136,6 @@ export default {
 	created() {
 		let cacheStory = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY);
 		this.select(cacheStory);
-		this.$emit("storyChange", this.selectedHistory);
 	}
 }
 </script>

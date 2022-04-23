@@ -72,13 +72,13 @@
 </template>
 
 <script>
-import { cacheService, CACHE_TYPE, CACHE_KEY } from '../../services/CacheService.js'
+import { cacheService, CACHE_TYPE, CACHE_KEY } from '../../services/CacheService'
 
-import NodeHead from './NodeHead.vue'
-import NodeFoot from './NodeFoot.vue'
+import NodeHead from './NodeHead'
+import NodeFoot from './NodeFoot'
 
-import ReorderingButtons from '../generic/ReorderingButtons.vue'
-import ListSelectInput from '../generic/ListSelectInput.vue'
+import ReorderingButtons from '../generic/ReorderingButtons'
+import ListSelectInput from '../generic/ListSelectInput'
 
 export default {
 	name: 'NavBranches',

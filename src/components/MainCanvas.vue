@@ -57,7 +57,7 @@ export default {
 		return {
 			currentView: 'NavHistory',
 			views: [
-				{label: "Stories", component: 'NavHistory', active:true, icon: "scroll", subs: []}, 
+				{label: "Stories", component: 'NavHistory', active: true, icon: "scroll", subs: []}, 
 				{label: "Dialog Tree", component: 'NavTree', icon: "code-branch", subs: [
 					{id:'sub21', option:'showTree', label:'Tree', value: true}, 
 					{id:"sub22", option:"showDialogs", label:"Dialogs",  value: true},
@@ -87,7 +87,7 @@ export default {
 			if (this.currentView === view.component) {
 				return;
 			}
-			view.subs.forEach(s => this.viewOptions[s.option] = true);
+			view.subs.forEach(s => this.viewOptions[s.option] = s.value);
 			this.currentView = view.component;
 		},
 		onStoryChange(data) {

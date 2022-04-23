@@ -13,15 +13,18 @@
 		</div>
 
 		<NodeDialogs v-show="showDialogs" class="dialogs" :node="currentNode" :style="{ width: nodeWidth(showDialogs) }"></NodeDialogs>
+
+		<NodeTriggers v-show="showTriggers" class="triggers" :style="{ width: nodeWidth(showTriggers) }"></NodeTriggers>
 	</v-container>
 </template>
 
 <script>
-import NavData from '../mixins/NavData.js'
+import NavData from '../mixins/NavData'
 
-import NavRecap from './tree/NavRecap.vue'
-import NavBranches from './tree/NavBranches.vue'
-import NodeDialogs from './tree/NodeDialogs.vue'
+import NavRecap from './tree/NavRecap'
+import NavBranches from './tree/NavBranches'
+import NodeDialogs from './tree/NodeDialogs'
+import NodeTriggers from './tree/NodeTriggers'
 
 export default {
 	name: 'NavTree',
@@ -31,7 +34,8 @@ export default {
 	components: {
 		NavRecap,
 		NavBranches,
-		NodeDialogs
+		NodeDialogs,
+		NodeTriggers
 	},
 	props: {
 		showTree: Boolean,

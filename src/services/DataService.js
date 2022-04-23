@@ -47,11 +47,12 @@ class DataService {
 				}
 				return params !== PARAMETER.ALL ? this.adapters[collection].convert(result.data) : this.adapters[collection].convertAll(result.data);
 			})
-			.finally(data => {
+			.then(data => {
 				if (keepCache) {
 					let cacheKey = cacheService.getCacheKeyByCollection(collection);
-					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data)
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data);
 				}
+				return data;
 			});
 
 		this._queue(collection, promise);
@@ -59,11 +60,6 @@ class DataService {
 	}
 
 	set(collection, operation, data, clearCache) {
-		if (clearCache) {
-			let cacheKey = cacheService.getCacheKeyByCollection(collection);
-			cacheService.removeFromCache(CACHE_TYPE.SESSION, cacheKey);
-		}
-
 		if (this.pendingCalls[collection]) {
 			return this.pendingCalls[collection];
 		}
@@ -73,14 +69,14 @@ class DataService {
 			.then(function(result) {
 				if (result.status === 200) {
 					// TODO: success !
-					return true;
+					return result.data;
 				}
 				return false;
 			})
-			.finally(data => {
-				if (clearCache) {
+			.then(data => {
+				if (data && clearCache) {
 					let cacheKey = cacheService.getCacheKeyByCollection(collection);
-					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data)
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data);
 				}
 			});
 

@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<h4 :class="{ decisiveChoice: node.isDecisive }" style="text-indent: 15%; letter-spacing: 2px; margin-bottom: 5px;"><font-awesome-icon v-if="node.isDecisive" icon="exclamation-circle" /> {{node.title}}</h4>
+	<v-card outlined>
+		<v-card-title :class="{ decisiveChoice: node.isDecisive }" style="letter-spacing: 2px; margin-bottom: 5px;"><font-awesome-icon v-if="node.isDecisive" icon="exclamation-circle" /> {{node.title}}</v-card-title>
 		<div v-for="(interaction, index) in simpleInteractions" :key="interaction.value.id">
 			<InteractionEdit :interactionIndex="index" 
 				@newInteraction="onNewInteraction"
@@ -40,7 +40,7 @@
 				:key="childNode.id"
 				:node="childNode"></NodeDialogs>
 		</div>
-	</div>
+	</v-card>
 </template>
 
 <script>
@@ -116,6 +116,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .decisiveChoice {
-	color: #4f000f
+	color: #ffb8ad
 }
 </style>
