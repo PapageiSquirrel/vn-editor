@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import { dataService, COLLECTION } from '../services/DataService.js'
-
 import NavData from '../mixins/NavData.js'
 
 import NavRecap from './tree/NavRecap.vue'
@@ -44,8 +42,8 @@ export default {
 	data() {
 		return {
 			collection: "trees",
-			traits: [],
-			triggers: []
+			keepCache: false,
+			clearCache: false
 		}
 	},
 	computed: {
@@ -71,17 +69,6 @@ export default {
 		nodeWidth(isShown) {
 			return isShown && this.numberOfComponents === 1 ? "100%" : "50%";
 		}
-	},
-	created() {
-		dataService.get(COLLECTION.TRAITS, null, true)
-			.then(result => {
-				this.traits = result.map(t => t.name);
-			});
-
-		dataService.get(COLLECTION.TRIGGERS, null, true)
-			.then(result => {
-				this.triggers = result.map(t => t.name);
-			});
 	},
 	destroyed() {
 		//this.save();

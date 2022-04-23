@@ -14,9 +14,20 @@
 				@onNodeDeletion="deleteNode"></NodeHead>
 		</div>
 
-		<ListSelectInput :elements="node.conditions" :elType="'condition'" :elKey="'trait'" :elList="traits.map(t => t.name)">
+		<ListSelectInput :elements="node.conditions" :elType="'condition'" :elKey="'trait'" :elLabel="'New Condition'" :elList="traits.map(t => t.name)" :isUnique="true">
 			<template v-slot:default="slotProps">
-				<v-select v-model="slotProps.element.step" :items="getSteps(slotProps.element.trait)" style="margin-left: 5%; margin-right: 5%;" />
+				<v-card-text>
+					<v-slider 
+						v-model="stepIndex[slotProps.element.trait]"
+						:tick-labels="getSteps(slotProps.element.trait)" 
+						@change="setStepValue(slotProps.element, stepIndex[slotProps.element.trait])" 
+						ticks="always" 
+						step="1" 
+						tick-size="2" 
+						:max="getSteps(slotProps.element.trait).length-1"
+						style="width:80%; margin-left: 5%; margin-right: 5%;">
+					</v-slider>
+				</v-card-text>
 			</template>
 		</ListSelectInput>
 
@@ -47,10 +58,12 @@
 			</div>
 		</div>
 
-		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elList="triggersPlusAnother" style="margin-top: 5%;">
+		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elLabel="'New Trigger'" :elList="triggersPlusAnother" :isUnique="true" style="margin-top: 5%;">
 			<template v-slot:default="slotProps">
 				<v-text-field type="text" v-if="slotProps.element.name === 'New Trigger'" v-model="newTrigger" style="margin-left: 5%; margin-right: 5%;" />
-				<v-btn v-if="slotProps.element.name === 'New Trigger'" fab color="primary" @click="saveTrigger"><font-awesome-icon icon="save" /></v-btn>
+				<v-btn v-if="slotProps.element.name === 'New Trigger'" fab color="primary" @click="saveTrigger">
+					<font-awesome-icon icon="save" />
+				</v-btn>
 			</template>
 		</ListSelectInput>
 
@@ -89,6 +102,7 @@ export default {
 			leftStepMargin: 50,
 			colorRatio: 32,
 			newTrigger: "",
+			stepIndex: {},
 			traits: [],
 			triggers: []
 		}
@@ -120,7 +134,24 @@ export default {
 				return [];
 			}
 
-			return trait.steps.map(s => s.name);
+			return trait.steps.map(s => s.name).reverse();
+		},
+		setStepValue(condition, stepIndex) {
+			if (!condition) {
+				return;
+			}
+
+			let trait = this.traits.find(t => t.name === condition.trait);
+			if (!trait) {
+				return;
+			}
+
+			let step = trait.steps.slice().reverse()[stepIndex];
+			if (!step) {
+				return;
+			}
+
+			condition.value = step.value;
 		},
 		toggleSubNodes() {
 			this.isOpen = true;

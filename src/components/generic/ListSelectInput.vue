@@ -2,7 +2,7 @@
 	<div>
 		<ul :aria-label="listTitle">
 			<li v-for="(el, index) in elements" :key="el[elKey]">
-				<v-select v-model="el[elKey]" :items="elList" />
+				<v-select v-model="el[elKey]" :items="itemsList(index)" />
 
 				<slot :element="el" style="display: block; width: auto;"></slot>
 
@@ -11,8 +11,8 @@
 				</v-btn>
 			</li>
 
-			<li v-show="!isEditing">
-				<v-select v-model="newElement" :items="elList" @change="addElement(newElement)" placeholder="New Condition" style="margin-left: 5%; margin-right: 5%;" />
+			<li v-show="showNewElement">
+				<v-select v-model="newElement" :items="itemsList(null)" @change="addElement(newElement)" :placeholder="elLabel" style="margin-left: 5%; margin-right: 5%;" />
 			</li>
 		</ul>
 	</div>
@@ -25,8 +25,9 @@ export default {
 		elements: Array,
 		elType: String,
 		elKey: String,
+		elLabel: String,
 		elList: Array,
-		
+		isUnique: Boolean
 	},
 	data: function() {
 		return {
@@ -40,9 +41,26 @@ export default {
 		},
 		listTitle() {
 			return this.elType.charAt(0).toUpperCase() + this.elType.slice(1) + "s";
+		},
+		areAllSelected() {
+			return this.isUnique ? this.elements.length >= this.elList.length : false;
+		},
+		showNewElement() {
+			return !this.isEditing && !this.areAllSelected
 		}
 	},
 	methods: {
+		itemsList(index) {
+			if (!this.isUnique) {
+				return this.elList;
+			}
+
+			let alreadySelectedList = this.elements.map(e => e[this.elKey]);
+			if (index != null) {
+				alreadySelectedList.splice(index, 1);
+			}
+			return this.elList.filter(e => !alreadySelectedList.includes(e));
+		},
 		addElement(value) {
 			let newEl = {};
 			newEl[this.elKey] = value;

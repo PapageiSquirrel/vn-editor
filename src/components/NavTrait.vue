@@ -17,7 +17,7 @@
 			</template>
 		</v-row>	
 		
-		<Toolbox :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="save" @toolUpload="upload"></Toolbox>
+		<Toolbox :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="_save" @toolUpload="upload"></Toolbox>
 	</v-container>
 </template>
 
@@ -50,8 +50,15 @@ export default {
 			return this.loadedData;
 		}
 	},
+	methods: {
+		_save() {
+			this.loadedData.forEach(t => t.steps.sort((a,b) => b.value - a.value));
+
+			this.save();
+		}
+	},
 	destroyed() {
-		this.save();
+		this._save();
 	}
 }
 </script>

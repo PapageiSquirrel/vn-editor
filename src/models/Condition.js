@@ -1,8 +1,8 @@
 class Condition {
-	constructor(trait, step) {
+	constructor(trait, value) {
 		this.id = conditionId++;
 		this.trait = trait;
-		this.step = step
+		this.value = value
 	}
 }
 
