@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import NavData from '../mixins/NavData.js'
+import NavData from '../../mixins/NavData.js'
 
-import TitleInput from './generic/TitleInput.vue'
-import ListInput from './generic/ListInput.vue'
-import Toolbox from './generic/Toolbox.vue'
-import FileUpload from './fileUploader/FileUpload.vue'
+import TitleInput from '../generic/TitleInput.vue'
+import ListInput from '../generic/ListInput.vue'
+import Toolbox from '../generic/Toolbox.vue'
+import FileUpload from '../fileUploader/FileUpload.vue'
 
 export default {
 	name: 'NavCharacter',

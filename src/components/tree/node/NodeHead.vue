@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TitleInput from '../generic/TitleInput.vue';
+import TitleInput from '../../generic/TitleInput.vue';
 
 export default {
   name: 'NodeHead',

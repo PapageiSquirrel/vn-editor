@@ -15,18 +15,18 @@
 
 				<v-responsive v-if="index % 2 === 1" :key="`width-${index}`" width="100%"></v-responsive>
 			</template>
-		</v-row>	
+		</v-row>
 		
 		<Toolbox :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="_save" @toolUpload="upload"></Toolbox>
 	</v-container>
 </template>
 
 <script>
-import NavData from '../mixins/NavData.js'
+import NavData from '../../mixins/NavData.js'
 
-import TitleInput from './generic/TitleInput.vue'
-import ListInput from './generic/ListInput.vue'
-import Toolbox from './generic/Toolbox.vue'
+import TitleInput from '../generic/TitleInput.vue'
+import ListInput from '../generic/ListInput.vue'
+import Toolbox from '../generic/Toolbox.vue'
 
 export default {
 	name: 'NavTrait',

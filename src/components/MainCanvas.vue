@@ -25,12 +25,29 @@
 						</v-list-item-icon>
 						<v-list-item-title v-text="view.label"></v-list-item-title>
 					</template>
-					<v-list v-if="view.subs.length">
-						<v-list-item v-for="sub in view.subs" :key="sub.id">
-							<v-switch :label="sub.label" v-model="sub.value" 
-								@change="changeSubOption(sub)"></v-switch>
-						</v-list-item>
-					</v-list>
+					<v-flex v-if="view.subs.length">
+						<template v-if="view.isMultiple">
+							<v-list>
+								<v-list-item v-for="sub in view.subs" :key="sub.id">
+									<v-switch  :label="sub.label" v-model="sub.value" 
+										@change="changeSubOption(sub)"></v-switch>
+								</v-list-item>
+							</v-list>
+						</template>
+
+						<template v-else>
+							<v-list>
+								<v-list-item-group mandatory>
+									<v-list-item v-for="sub in view.subs" :key="sub.id" @click="selectOption(sub, view)">
+										<v-list-item-icon>
+											<font-awesome-icon :icon="sub.icon" />
+										</v-list-item-icon>
+										<v-list-item-title v-text="sub.label"></v-list-item-title>
+									</v-list-item>
+								</v-list-item-group>
+							</v-list>
+						</template>
+					</v-flex>
 				</v-list-group>
 			</v-list>
 		</v-navigation-drawer>
@@ -40,32 +57,33 @@
 </template>
 
 <script>
-import NavHistory from './NavHistory.vue'
-import NavTree from './NavTree.vue'
-import NavCharacter from './NavCharacter.vue'
-import NavTrait from './NavTrait.vue'
+import NavHistory from './NavHistory'
+import NavStoryElements from './NavStoryElements'
+import NavTree from './NavTree'
 
 export default {
 	name: 'MainCanvas',
 	components: {
 		NavHistory,
-		NavTree,
-		NavCharacter,
-		NavTrait
+		NavStoryElements,
+		NavTree
 	},
 	data() {
 		return {
 			currentView: 'NavHistory',
 			views: [
 				{label: "Stories", component: 'NavHistory', active: true, icon: "scroll", subs: []}, 
-				{label: "Dialog Tree", component: 'NavTree', icon: "code-branch", subs: [
-					{id:'sub21', option:'showTree', label:'Tree', value: true}, 
-					{id:"sub22", option:"showDialogs", label:"Dialogs",  value: true},
-					{id:"sub23", option:"showTriggers", label:"Triggers",  value: false},
-					{id:"sub24", option:"showExplorations", label:"Explorations", value: false}
-				]}, 
-				{label: "Characters", component: 'NavCharacter', icon: "user-plus", subs: []}, 
-				{label: "Traits", component: 'NavTrait', icon: "brain", subs: []}
+				{label: "Story Elements", component: 'NavStoryElements', icon: "puzzle-piece", option:"currentStoryElement", isMultiple: false, subs: [
+					{id:'sub21', label:"Characters", value: "NavCharacter", icon: "user-plus"}, 
+					{id:"sub22", label:"Traits", value: "NavTrait", icon: "brain"},
+					{id:"sub23", label:"Locations", value: "NavLocation", icon: "map"}
+				]},
+				{label: "Dialog Tree", component: 'NavTree', icon: "code-branch", isMultiple: true, subs: [
+					{id:'sub31', option:'showTree', label:'Tree', value: true}, 
+					{id:"sub32", option:"showDialogs", label:"Dialogs",  value: true},
+					{id:"sub33", option:"showTriggers", label:"Triggers",  value: false},
+					{id:"sub34", option:"showExplorations", label:"Explorations", value: false}
+				]}
 			],
 			viewOptions: {},
 			storyOverview: null,
@@ -83,11 +101,21 @@ export default {
 			this.viewOptions[sub.option] = !this.viewOptions[sub.option];
 			this.viewOptions = {...this.viewOptions};
 		},
+		selectOption(sub, view) {
+			this.viewOptions[view.option] = sub.value;
+			this.viewOptions = {...this.viewOptions};
+		},
 		selectView(view) {
 			if (this.currentView === view.component) {
 				return;
 			}
-			view.subs.forEach(s => this.viewOptions[s.option] = s.value);
+
+			if (view.isMultiple) {
+				view.subs.forEach(s => this.viewOptions[s.option] = s.value);
+			} else {
+				this.viewOptions[view.option] = view.subs[0].value;
+			}
+			
 			this.currentView = view.component;
 		},
 		onStoryChange(data) {
@@ -100,6 +128,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.btn-toggle {
+  flex-direction: column;
+}
+
 textarea {
 	min-height: 16px;
 	max-height: 240px;

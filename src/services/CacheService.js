@@ -23,6 +23,8 @@ class CacheService {
 				return CACHE_KEY.HISTORY_IDENTIFIER;
 			case COLLECTION.CHARACTERS:
 				return CACHE_KEY.STORY_CHARACTERS;
+			case COLLECTION.LOCATIONS:
+				return CACHE_KEY.STORY_LOCATIONS;
 			case COLLECTION.TRAITS:
 				return CACHE_KEY.STORY_TRAITS;
 			case COLLECTION.TRIGGERS:
@@ -60,6 +62,7 @@ const CACHE_KEY = {
 	HISTORY_IDENTIFIER: "historyId",
 	STORY: "story",
 	STORY_CHARACTERS: "storyCharacters",
+	STORY_LOCATIONS: "storyLocations",
 	STORY_TRAITS: "storyTraits",
 	STORY_TRIGGERS: "storyTriggers",
 	INTERACTION_EDIT: "interactionEdit"

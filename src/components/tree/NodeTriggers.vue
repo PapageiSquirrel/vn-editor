@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-row>
+		<v-row dense>
 			<ListInput :elements="triggers" :elType="'trigger'" :elKey="'name'"></ListInput>
 		</v-row>	
 	</v-container>

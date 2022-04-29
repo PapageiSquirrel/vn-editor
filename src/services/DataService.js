@@ -1,12 +1,13 @@
 import axios from 'axios'
 
-import Tree from '../models/Tree.js'
-import Character from '../models/Character.js'
-import History from '../models/History.js'
-import Trait from '../models/Trait.js'
-import Trigger from '../models/Trigger.js'
+import Tree from '../models/Tree'
+import Character from '../models/Character'
+import History from '../models/History'
+import Location from '../models/Location'
+import Trait from '../models/Trait'
+import Trigger from '../models/Trigger'
 
-import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService.js'
+import { cacheService, CACHE_TYPE, CACHE_KEY } from './CacheService'
 
 const API_URL = "http://localhost:45050/api/";
 
@@ -17,6 +18,7 @@ class DataService {
 			trees: treeAdapter,
 			characters: characterAdapter,
 			histories: historyAdapter,
+			locations: locationAdapter,
 			traits: traitAdapter,
 			triggers: triggerAdapter
 		}
@@ -71,7 +73,6 @@ class DataService {
 					// TODO: success !
 					return result.data;
 				}
-				return false;
 			})
 			.then(data => {
 				if (data && clearCache) {
@@ -93,6 +94,7 @@ const COLLECTION = {
 	TREES: "trees",
 	CHARACTERS: "characters",
 	HISTORIES: "histories",
+	LOCATIONS: "locations",
 	TRAITS: "traits",
 	TRIGGERS: "triggers"
 };
@@ -174,6 +176,32 @@ const historyAdapter = {
 		return new History(null, "New Story", "Description of the story");
 	}
 };
+
+const locationAdapter = {
+	addIdentifier(data) {
+		let id = this.getIdentifier();
+		return {
+			id: id,
+			data: data
+		};
+	},
+	getIdentifier() {
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_LOCATIONS);
+	},
+	convert(result) {
+		return result && result.data ? result.data.map(l => new Location(l.name, l.description, l.places)) : [];
+	},
+	convertAll(result) {
+		return result && result.reduce((res,l) => { 
+			res[l.id] = l.data.map(loc => new Location(loc.name, loc.description, loc.places));
+			return res;
+		}, {});
+	},
+	create() {
+		return new Location("New Location", "Description of the location", []);
+	}
+};
+
 
 const traitAdapter = {
 	addIdentifier(data) {
