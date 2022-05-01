@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { COLLECTION } from './DataService'
+
 const FILE_API = "http://localhost:45050/api/file/"
 
 class FileUploadService {
@@ -17,6 +19,17 @@ class FileUploadService {
 			return null;
 		});
 	}
+
+	getFileTypeByCollection(collection) {
+		switch(collection) {
+			case COLLECTION.CHARACTERS:
+				return FILE_TYPE.CHARACTER;
+			case COLLECTION.LOCATIONS:
+				return FILE_TYPE.BACKGROUND;
+			default:
+				return FILE_TYPE.OTHER;
+		}
+	}
 }
 
 const FILE_TYPE = {
@@ -24,7 +37,8 @@ const FILE_TYPE = {
 	CHARACTER: "characters",
 	MUSIC: "musics",
 	SOUND: "sounds",
-	VOICE: "voices"
+	VOICE: "voices",
+	OTHER: "others"
 };
 
 const fileUploadService = new FileUploadService();

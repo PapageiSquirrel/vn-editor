@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { fileUploadService, FILE_TYPE } from '../../services/FileUploadService.js'
+import { fileUploadService } from '../../services/FileUploadService.js'
 
 import PreviewModal from '../modal/PreviewModal.vue'
 
@@ -24,6 +24,7 @@ export default {
 	},
 	props: {
 		initFileName: String,
+		collection: String,
 		uploadLabel: String
 	},
 	data() {
@@ -37,8 +38,11 @@ export default {
 		}
 	},
 	computed: {
+		fileType() {
+			return fileUploadService.getFileTypeByCollection(this.collection)
+		},
 		assetUrl() {
-			return FILE_TYPE.CHARACTER + '/' + this.fileName || "";
+			return this.fileType + '/' + this.fileName || "";
 		}
 	},
 	methods: {
@@ -46,13 +50,13 @@ export default {
 			let formData = new FormData();
 			formData.append('asset', this.file);
 			
-			return fileUploadService.upload(formData, this.fileName, FILE_TYPE.CHARACTER).then((res) => {
+			return fileUploadService.upload(formData, this.fileName, this.fileType).then((res) => {
 				if (res) {
 					this.fileName = res;
 					this.$emit('upload', {fileUrl: this.fileLabel, fileName: this.fileName});
 					this.isUploaded = true;
 				}
-			}); // FILE_TYPE.CHARACTER
+			});
 		},
 		preview() {
 			if (this.isUploaded) {

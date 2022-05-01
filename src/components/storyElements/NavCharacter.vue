@@ -14,6 +14,7 @@
 						<ListInput :elements="char.moods" :elType="'mood'" :elKey="'type'">
 							<template v-slot:default="slotProps">
 								<FileUpload :initFileName="fileName(char, slotProps)"
+									:collection="collection"
 									:uploadLabel="'Mood asset'"
 									@upload="onAssetUpload($event, slotProps)"
 									style="width: 60%; margin-left: 5%; margin-right: 5%;" ></FileUpload>
