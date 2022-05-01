@@ -8,13 +8,10 @@
 </template>
 
 <script>
-import NavData from '../../mixins/NavData.js'
+import { cacheService, CACHE_TYPE, CACHE_KEY } from '../../services/CacheService'
 
 export default {
 	name: 'DialogEdit',
-	mixins: [
-		NavData
-	],
 	props: {
 		defaultCharacter: String,
 		defaultMood: String,
@@ -23,19 +20,14 @@ export default {
 	},
 	data() {
 		return {
-			collection: "characters",
-			keepCache: true,
-			clearCache: false,
 			isEditing: false,
 			character: "",
 			mood: "",
-			text: ""
+			text: "",
+			characters: []
 		}
 	},
 	computed: {
-		characters() {
-			return this.loadedData || [];
-		},
 		moods() {
 			let character = this.characters && this.characters.find(c => c.name === this.character);
 			return character && character.moods || [];
@@ -61,6 +53,9 @@ export default {
 		}
 	},
 	created() {
+		let storyCharacters = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_CHARACTERS);
+		this.characters = storyCharacters || [];
+
 		this.character = this.defaultCharacter || "";
 		this.mood = this.defaultMood || "";
 		this.text = this.defaultText || "";

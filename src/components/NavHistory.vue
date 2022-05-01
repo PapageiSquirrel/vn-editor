@@ -35,6 +35,16 @@
 										</v-card-text>
 									</v-card>
 								</v-col>
+
+								<v-col cols="12">
+									<v-card>
+										<v-card-title>Locations</v-card-title>
+
+										<v-card-text>
+											<v-card v-for="l in storyLocations(hist.id)" :key="l.id">{{l.name}}</v-card>
+										</v-card-text>
+									</v-card>
+								</v-col>
 							</v-row>
 						</v-container>
 					</v-card-text>
@@ -81,7 +91,7 @@ export default {
 	data() {
 		return {
 			collection: "histories",
-			collections: ["characters", "traits", "triggers"],
+			collections: ["characters", "locations", "traits", "triggers"],
 			selectedHistory: null,
 			params: PARAMETER.ALL
 		}
@@ -93,16 +103,22 @@ export default {
 		characters() {
 			return this.loadedDatas && this.loadedDatas[0];
 		},
-		traits() {
+		locations() {
 			return this.loadedDatas && this.loadedDatas[1];
 		},
+		traits() {
+			return this.loadedDatas && this.loadedDatas[2];
+		},
 		triggers() {
-			return this.loadedDatas && this.loadedDatas[2]
+			return this.loadedDatas && this.loadedDatas[3]
 		}
 	},
 	methods: {
 		storyCharacters(storyId) {
 			return this.characters && this.characters[storyId];
+		},
+		storyLocations(storyId) {
+			return this.locations && this.locations[storyId];
 		},
 		storyTraits(storyId) {
 			return this.traits && this.traits[storyId];
@@ -113,6 +129,8 @@ export default {
 		select(value) {
 			let cacheStory = cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY);
 			if (cacheStory && value && cacheStory.id === value.id) {
+				this.selectedHistory = value;
+				this.$emit("storyChange", this.selectedHistory);
 				return;
 			}
 
@@ -122,6 +140,7 @@ export default {
 				cacheService.addToMultipleCache([CACHE_TYPE.APP, CACHE_TYPE.SESSION], CACHE_KEY.HISTORY_IDENTIFIER, parseInt(this.selectedHistory.id, 10));
 				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY, JSON.stringify(this.selectedHistory));
 				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_CHARACTERS, JSON.stringify(this.storyCharacters(this.selectedHistory.id)));
+				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_LOCATIONS, JSON.stringify(this.storyLocations(this.selectedHistory.id)));
 				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRAITS, JSON.stringify(this.storyTraits(this.selectedHistory.id)));
 				cacheService.addToCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_TRIGGERS, JSON.stringify(this.storyTriggers(this.selectedHistory.id)));
 			} catch(e) {

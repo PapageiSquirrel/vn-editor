@@ -186,7 +186,7 @@ const locationAdapter = {
 		};
 	},
 	getIdentifier() {
-		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.STORY_LOCATIONS);
+		return cacheService.getCache(CACHE_TYPE.SESSION, CACHE_KEY.HISTORY_IDENTIFIER);
 	},
 	convert(result) {
 		return result && result.data ? result.data.map(l => new Location(l.name, l.description, l.places)) : [];

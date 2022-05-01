@@ -4,12 +4,12 @@
 			<template v-for="(char, index) in characters">
 				<v-col :key="char.id">
 					<v-card class="pa-2" outlined tile>
-						<div style="display: flex;">
-							<TitleInput :title="char.name" :titleStyle="{ 'font-weight': 'bold' }" @save="char.name = $event" style="width: 100%"></TitleInput>
-							<button class="button-clear button-icon" @click="remove(char)" style="float: right;">
+						<v-container style="display: flex;">
+							<TitleInput :title="char.name" :titleStyle="{ 'font-weight': 'bold' }" @save="char.name = $event"></TitleInput>
+							<v-btn class="button-clear button-icon" @click="remove(char)">
 								<font-awesome-icon icon="times" />
-							</button>
-						</div>
+							</v-btn>
+						</v-container>
 						<v-textarea v-model="char.description" rows="1"></v-textarea>
 						<ListInput :elements="char.moods" :elType="'mood'" :elKey="'type'">
 							<template v-slot:default="slotProps">

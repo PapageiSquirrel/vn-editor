@@ -25,7 +25,7 @@ import ListSelectInput from '../../generic/ListSelectInput'
 export default {
 	name: 'NodeCondition',
 	props: {
-		conditions: Object
+		conditions: Array
 	},
 	components: {
 		ListSelectInput

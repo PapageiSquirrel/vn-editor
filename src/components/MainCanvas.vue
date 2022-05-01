@@ -72,7 +72,7 @@ export default {
 		return {
 			currentView: 'NavHistory',
 			views: [
-				{label: "Stories", component: 'NavHistory', active: true, icon: "scroll", subs: []}, 
+				{label: "Stories", component: 'NavHistory', active: true, icon: "scroll", isMultiple: true, subs: []}, 
 				{label: "Story Elements", component: 'NavStoryElements', icon: "puzzle-piece", option:"currentStoryElement", isMultiple: false, subs: [
 					{id:'sub21', label:"Characters", value: "NavCharacter", icon: "user-plus"}, 
 					{id:"sub22", label:"Traits", value: "NavTrait", icon: "brain"},

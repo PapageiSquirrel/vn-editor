@@ -4,7 +4,12 @@
 			<template v-for="location in locations">
 				<v-col :key="location.id">
 					<v-card class="pa-2" outlined tile>
-						<TitleInput :title="location.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="location.name = $event"></TitleInput>
+						<v-container style="display: flex;">
+							<TitleInput :title="location.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="location.name = $event"></TitleInput>
+							<v-btn class="button-clear button-icon" @click="remove(location)">
+								<font-awesome-icon icon="times" />
+							</v-btn>
+						</v-container>
 						<v-textarea v-model="location.description" rows="1"></v-textarea>
 						<ListInput :elements="location.places" :elType="'place'" :elKey="'name'">
 							<template v-slot:default="slotProps">

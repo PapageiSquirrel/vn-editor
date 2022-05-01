@@ -65,7 +65,7 @@ export default {
 		}
 	},
 	created() {
-		this.id = this._uid;
+		this.id = this._uid + "";
 		this.fileName = this.initFileName;
 		this.isUploaded = !!this.isUploaded;
 	}

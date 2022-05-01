@@ -4,7 +4,12 @@
 			<template v-for="(trait, index) in traits">
 				<v-col :key="trait.id">
 					<v-card class="pa-2" outlined tile>
-						<TitleInput :title="trait.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="trait.name = $event"></TitleInput>
+						<v-container style="display: flex;">
+							<TitleInput :title="trait.name" :titleStyle="{ 'font-weight': 'bold', 'font-size': '24px' }" @save="trait.name = $event"></TitleInput>
+							<v-btn class="button-clear button-icon" @click="remove(trait)">
+								<font-awesome-icon icon="times" />
+							</v-btn>
+						</v-container>
 						<ListInput :elements="trait.steps" :elType="'step'" :elKey="'name'">
 							<template v-slot:default="slotProps">
 								<v-text-field type="number" v-model="slotProps.element.value" style="margin-left: 5%; margin-right: 5%;" />
