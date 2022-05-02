@@ -13,8 +13,6 @@
 		</div>
 
 		<NodeDialogs v-show="showDialogs" class="dialogs" :node="currentNode" :style="{ width: nodeWidth(showDialogs) }"></NodeDialogs>
-
-		<NodeTriggers v-show="showTriggers" class="triggers" :style="{ width: nodeWidth(showTriggers) }"></NodeTriggers>
 	</v-container>
 </template>
 
@@ -24,7 +22,6 @@ import NavData from '../mixins/NavData'
 import NavRecap from './tree/NavRecap'
 import NavBranches from './tree/NavBranches'
 import NodeDialogs from './tree/NodeDialogs'
-import NodeTriggers from './tree/NodeTriggers'
 
 export default {
 	name: 'NavTree',
@@ -34,14 +31,11 @@ export default {
 	components: {
 		NavRecap,
 		NavBranches,
-		NodeDialogs,
-		NodeTriggers
+		NodeDialogs
 	},
 	props: {
 		showTree: Boolean,
-		showDialogs: Boolean,
-		showTriggers: Boolean,
-		showExplorations: Boolean
+		showDialogs: Boolean
 	},
 	data() {
 		return {
@@ -61,7 +55,7 @@ export default {
 			return this.tree && this.tree.getCurrentNode();
 		},
 		numberOfComponents() {
-			return Number(this.showTree) + Number(this.showDialogs) + Number(this.showTriggers) + Number(this.showExplorations);
+			return Number(this.showTree) + Number(this.showDialogs);
 		}
 	},
 	methods: {
@@ -75,7 +69,7 @@ export default {
 		}
 	},
 	destroyed() {
-		//this.save();
+		this.save();
 	}
 }
 </script>

@@ -6,13 +6,15 @@
 import NavCharacter from './storyElements/NavCharacter'
 import NavTrait from './storyElements/NavTrait'
 import NavLocation from './storyElements/NavLocation'
+import NavTrigger from './storyElements/NavTrigger'
 
 export default {
 	name: 'MainCanvas',
 	components: {
 		NavCharacter,
 		NavTrait,
-		NavLocation
+		NavLocation,
+		NavTrigger
 	},
 	props: {
 		currentStoryElement: String

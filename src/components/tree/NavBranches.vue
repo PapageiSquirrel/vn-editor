@@ -43,14 +43,7 @@
 			</div>
 		</div>
 
-		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elLabel="'New Trigger'" :elList="triggersPlusAnother" :isUnique="true" style="margin-top: 5%;">
-			<template v-slot:default="slotProps">
-				<v-text-field type="text" v-if="slotProps.element.name === 'New Trigger'" v-model="newTrigger" style="margin-left: 5%; margin-right: 5%;" />
-				<v-btn v-if="slotProps.element.name === 'New Trigger'" fab color="primary" @click="saveTrigger">
-					<font-awesome-icon icon="save" />
-				</v-btn>
-			</template>
-		</ListSelectInput>
+		<ListSelectInput :elements="node.triggers" :elType="'trigger'" :elKey="'name'" :elLabel="'New Event'" :elList="triggers" :isUnique="true" style="margin-top: 5%;"></ListSelectInput>
 
 		<NodeFoot v-if="false" :node="node"></NodeFoot>
 	</div>
@@ -106,9 +99,6 @@ export default {
 			let color = (this.depth * this.colorRatio).toString();
 			return 'rgb(' + color + ',' + color + ',' + color + ')';
 		},
-		triggersPlusAnother() {
-			return [...this.triggers, "New Trigger"];
-		},
 		isNodeSelected() {
 			return this.nodeSelected && this.node.id === this.nodeSelected.id;
 		}
@@ -129,10 +119,6 @@ export default {
 		},
 		deleteNode() {
 
-		},
-		saveTrigger() {
-			// TODO : add a new trigger to the collection
-			this.newTrigger = "";
 		},
 		reorderChildren(event) {
 			this.node.children.splice(event.next, 0, this.node.children.splice(event.previous, 1)[0]);

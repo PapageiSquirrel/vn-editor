@@ -4,7 +4,7 @@ import { Condition } from './Condition.js'
 import Trigger from './Trigger.js'
 
 export default class TreeNode {
-	constructor(index, title, description, interactions, isDecisive, triggers) {
+	constructor(index, title, description, interactions, isDecisive, conditions, triggers) {
 		this.id = nodeId++;
 		this.index = index;
 		this.children = [];
@@ -12,6 +12,7 @@ export default class TreeNode {
 
 		this.initGenericData(title, description);
 		this.initInteractionData(interactions, isDecisive);
+		this.initConditionData(conditions);
 		this.initTriggerData(triggers);
 	}
 
@@ -116,6 +117,14 @@ let interactionMixin = {
 		}
 	},
 
+	initConditionData(conditions) {
+		if (!conditions) {
+			this.conditions = this.conditions.slice();
+			return;
+		}
+		this.conditions = conditions.map(c => new Condition(c.trait, c.operator, c.value));
+	},
+
 	addDialog(index, character, mood, text) {
 		this.interactions.splice(index, 0, {type: INTERACTION_TYPE.DIALOG, value: new Dialog(character, mood, text)});
 	},
@@ -156,9 +165,10 @@ let triggerMixin = {
 
 	initTriggerData(triggers) {
 		if (!triggers) {
+			this.triggers = this.triggers.slice();
 			return;
 		}
-		triggers.map(t => new Trigger(t.name));
+		this.triggers = triggers.map(t => new Trigger(t.name));
 	},
 
 	addTrigger(name) {

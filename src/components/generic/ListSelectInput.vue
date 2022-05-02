@@ -36,9 +36,6 @@ export default {
 		}
 	},
 	computed: {
-		placeholder() {
-			return "Add a new " + this.elType;
-		},
 		listTitle() {
 			return this.elType.charAt(0).toUpperCase() + this.elType.slice(1) + "s";
 		},

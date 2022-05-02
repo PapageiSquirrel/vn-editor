@@ -12,7 +12,7 @@ export default class Tree {
 	}
 
 	__buildNodes(index, node) {
-		let newNode = !node ? new TreeNode(index) : new TreeNode(index, node.title, node.description, node.interactions, node.isDecisive);
+		let newNode = !node ? new TreeNode(index) : new TreeNode(index, node.title, node.description, node.interactions, node.isDecisive, node.conditions, node.triggers);
 		if (node && node.children.length) {
 			newNode.children = node.children.map((child, index) => {
 				return this.__buildNodes(index, child);

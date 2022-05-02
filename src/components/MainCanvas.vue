@@ -76,13 +76,12 @@ export default {
 				{label: "Story Elements", component: 'NavStoryElements', icon: "puzzle-piece", option:"currentStoryElement", isMultiple: false, subs: [
 					{id:'sub21', label:"Characters", value: "NavCharacter", icon: "user-plus"}, 
 					{id:"sub22", label:"Traits", value: "NavTrait", icon: "brain"},
-					{id:"sub23", label:"Locations", value: "NavLocation", icon: "map"}
+					{id:"sub23", label:"Locations", value: "NavLocation", icon: "map"},
+					{id:"sub24", label:"Events", value: "NavTrigger", icon: "calendar-check"}
 				]},
 				{label: "Dialog Tree", component: 'NavTree', icon: "code-branch", isMultiple: true, subs: [
 					{id:'sub31', option:'showTree', label:'Tree', value: true}, 
-					{id:"sub32", option:"showDialogs", label:"Dialogs",  value: true},
-					{id:"sub33", option:"showTriggers", label:"Triggers",  value: false},
-					{id:"sub34", option:"showExplorations", label:"Explorations", value: false}
+					{id:"sub32", option:"showDialogs", label:"Dialogs",  value: true}
 				]}
 			],
 			viewOptions: {},

@@ -1,8 +1,10 @@
 <template>
 	<v-container>
 		<v-row dense>
-			<ListInput :elements="triggers" :elType="'trigger'" :elKey="'name'"></ListInput>
-		</v-row>	
+			<ListInput :elements="triggers" :elType="'event'" :elKey="'name'"></ListInput>
+		</v-row>
+
+		<Toolbox :nbUndos="modificationHistory.length" @toolAdd="add" @toolUndo="undo" @toolSave="save"></Toolbox>
 	</v-container>
 </template>
 
@@ -11,7 +13,7 @@ import NavData from '../../mixins/NavData.js'
 import ListInput from '../generic/ListInput.vue'
 
 export default {
-	name: 'NodeTriggers',
+	name: 'NavTrigger',
 	mixins: [
 		NavData
 	],

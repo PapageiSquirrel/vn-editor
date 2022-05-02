@@ -32,6 +32,10 @@ export default {
 			this.watch();
 		},
 		save(data) {
+			if (!this.modificationHistory.length) {
+				return;
+			}
+
 			let jsData;
 			if (Array.isArray(this.loadedData)) {
 				jsData = [...this.loadedData];
