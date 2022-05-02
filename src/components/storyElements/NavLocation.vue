@@ -20,14 +20,6 @@
 									style="width: 60%; margin-left: 5%; margin-right: 5%;" ></FileUpload>
 							</template>
 						</ListInput>
-
-						<v-card-actions>
-							<v-spacer></v-spacer>
-							<v-btn @click="remove(location)">
-								<font-awesome-icon icon="times" style="margin: 10px;" /> Delete
-							</v-btn>
-							<v-spacer></v-spacer>
-					</v-card-actions>		
 					</v-card>
 				</v-col>
 			</template>

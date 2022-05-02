@@ -52,7 +52,7 @@ class DataService {
 			.then(data => {
 				if (keepCache) {
 					let cacheKey = cacheService.getCacheKeyByCollection(collection);
-					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data);
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, JSON.stringify(data));
 				}
 				return data;
 			});
@@ -76,8 +76,10 @@ class DataService {
 			})
 			.then(data => {
 				if (data && clearCache) {
+					let id = this.adapters[collection].getIdentifier();
 					let cacheKey = cacheService.getCacheKeyByCollection(collection);
-					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, data);
+					let array = data.find(el => el.id === id).data;
+					cacheService.addToCache(CACHE_TYPE.SESSION, cacheKey, JSON.stringify(array));
 				}
 			});
 

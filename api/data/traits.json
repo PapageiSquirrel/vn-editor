@@ -1,1 +1,1 @@
-[{"id":1,"data":[{"id":9,"name":"Happy","steps":[{"name":"Joyous","value":"5"},{"name":"Neutral","value":"0"},{"name":"Sad","value":"-5"}]},{"id":10,"name":"Coward","steps":[]},{"id":11,"name":"Violent","steps":[]}]},{"id":3,"data":[]}]
+[{"id":1,"data":[{"id":0,"name":"Happy","steps":[{"name":"Joyous","value":"5"},{"name":"Neutral","value":"0"},{"name":"Sad","value":"-5"}]},{"id":1,"name":"Coward","steps":[]},{"id":2,"name":"Violent","steps":[]}]},{"id":3,"data":[]}]
